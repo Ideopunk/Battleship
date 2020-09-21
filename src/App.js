@@ -57,34 +57,39 @@ class App extends Component {
 					shipNumber="0"
 					title="Carrier"
           hits={this.state.participants[0][0]}
+          sunk={this.state.participants[0][0].some(part => part === false)? false : true}
           onShipHit={this.onShipHit}
 				/>
 				<Ship
 					entrant="0"
 					shipNumber="1"
 					title="Battleship"
-					hits={this.state.participants[0][1]}
+          hits={this.state.participants[0][1]}
+          sunk={this.state.participants[0][1].some(part => part === false)? false : true}
           onShipHit={this.onShipHit}
 				/>
 				<Ship
 					entrant="0"
 					shipNumber="2"
 					title="Destroyer"
-					hits={this.state.participants[0][2]}
+          hits={this.state.participants[0][2]}
+          sunk={this.state.participants[0][2].some(part => part === false)? false : true}
           onShipHit={this.onShipHit}
 				/>
 				<Ship
 					entrant="0"
 					shipNumber="3"
 					title="Submarine"
-					hits={this.state.participants[0][3]}
+          hits={this.state.participants[0][3]}
+          sunk={this.state.participants[0][3].some(part => part === false)? false : true}
           onShipHit={this.onShipHit}
 				/>
 				<Ship
 					entrant="0"
 					shipNumber="4"
-					title="Patrol"
+          title="Patrol"
           hits={this.state.participants[0][4]}
+          sunk={this.state.participants[0][4].some(part => part === false)? false : true}
           onShipHit={this.onShipHit}
 				/>
 			</div>

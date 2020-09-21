@@ -2,13 +2,6 @@ import React, { Component } from "react";
 
 class Ship extends Component {
 	hit = e => {
-        console.log(e.target)
-        console.log(
-            e.target.getAttribute('data-value'), // ship status
-            e.target.getAttribute('name'), // ship areat
-			e.target.parentNode.getAttribute('data-value'), // ship number
-            this.props.entrant // entrant number
-        )
 		this.props.onShipHit(
             e.target.getAttribute('data-value'), // ship status
             e.target.getAttribute('name'), // ship areat
@@ -30,7 +23,7 @@ class Ship extends Component {
 		));
 
 		return (
-			<div className={this.props.title} data-value={this.props.shipNumber}>
+			<div className={`${this.props.title} + ${this.props.sunk === true? "sunk" : null}`} data-value={this.props.shipNumber}>
 				{divs}
 			</div>
 		);
