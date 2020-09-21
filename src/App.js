@@ -58,6 +58,8 @@ class App extends Component {
     const currentState = this.state
     if (status === "naw") {
       currentState.participants[entrantNumber].board[boardIndex] = "miss"
+    } else if (status === "ship") {
+      currentState.participants[entrantNumber].board[boardIndex] = "hit"
     }
 
     this.setState(currentState)
@@ -83,8 +85,11 @@ class App extends Component {
 	};
 
 	winCelebration = (entrantNumber) => {
-		const name = Object.keys(this.state.participants[entrantNumber]);
-		alert(`${name} wins!!!`);
+		if (entrantNumber === 0) {
+      alert(`You win!!!`);
+    } else {
+      alert(`Computer wins!!`)
+    }
 		this.setState(this.initialState);
 	};
 
