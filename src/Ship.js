@@ -1,18 +1,40 @@
 import React, { Component } from "react";
 
 class Ship extends Component {
-
-    hit(e) {
-        this.props.onShipHit(e.target.value, e.target.parentNode.value, this.props.side)
-    }
-
-    render() {
-        const divs = this.props.hits.map((hit, index) => <div key={index} value={hit} onClick={this.hit}></div>)
-
-        return (
-            <div className={this.props.title} value={this.props.title}>{divs}</div>
+	hit = e => {
+        console.log(e.target)
+        console.log(
+            e.target.getAttribute('data-value'), // ship status
+            e.target.getAttribute('name'), // ship areat
+			e.target.parentNode.getAttribute('data-value'), // ship number
+            this.props.entrant // entrant number
         )
-    }
+		this.props.onShipHit(
+            e.target.getAttribute('data-value'), // ship status
+            e.target.getAttribute('name'), // ship areat
+			e.target.parentNode.getAttribute('data-value'), // ship number
+            this.props.entrant // entrant number
+		);
+	};
+
+	render() {
+		console.log(this.props);
+		const divs = this.props.hits.map((hit, index) => (
+			<div
+                key={index}
+                name={index}
+				data-value={hit}
+				className={hit === false ? "ship-cell" : "hit-cell"}
+				onClick={this.hit}
+			></div>
+		));
+
+		return (
+			<div className={this.props.title} data-value={this.props.shipNumber}>
+				{divs}
+			</div>
+		);
+	}
 }
 
 export default Ship;

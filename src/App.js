@@ -1,78 +1,91 @@
 import React, { Component } from "react";
 import Ship from "./Ship";
-import "./App.css";
+import "./App.scss";
 
 class App extends Component {
 	state = {
-		player: [
-			[false, false, false, false, false],
-			[false, false, false, false],
-			[false, false, false],
-			[false, false, false],
-			[false, false],
-		],
-		computer: [
-			[false, false, false, false, false],
-			[false, false, false, false],
-			[false, false, false],
-			[false, false, false],
-			[false, false],
-		],
+    participants: [
+      [
+        [false, false, false, false, false],
+        [false, false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false],
+      ],
+      [
+        [false, false, false, false, false],
+        [false, false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false],
+      ],
+    ]
+		
 	};
 
-	onShipHit = (entrant, shipNumber, shipArea) => {
-		const currentState = this.state;
-		currentState[entrant][shipNumber][shipArea] = true;
+
+	onShipHit = (status, shipArea, shipNumber, entrantNumber) => {
+    entrantNumber = Number(entrantNumber)
+    console.log(this.state)
+    const currentState = this.state;
+    console.log(currentState)
+    console.log(status, shipArea, shipNumber, entrantNumber)
+		currentState.participants[entrantNumber][shipNumber][shipArea] = true;
 		this.setState(currentState);
-		this.winCheck(entrant);
+		this.winCheck(entrantNumber);
 	};
 
-	winCheck = (entrant) => {
-    const entrantShips = this.state[entrant];
-    const falseFound = entrantShips.find(ship => 
-      ship.find(part => part === false)
-    )
+	winCheck = (entrantNumber) => {
+    const entrantShips = this.state.participants[entrantNumber];
+    const falseFound = entrantShips.find(ship => ship.some(part => part === false))
+    console.log(falseFound)
     if (!falseFound) {
-      this.winCelebration(entrant)
+      this.winCelebration(entrantNumber)
     }
 	};
 
-  winCelebration = entrant => {
-    alert(`${entrant} wins!!!`)
+  winCelebration = entrantNumber => {
+    const name = Object.keys(this.state.participants[entrantNumber])
+    alert(`${name} wins!!!`)
   }
 
 	render() {
 		return (
 			<div className="App">
 				<Ship
-					entrant="player"
+					entrant="0"
 					shipNumber="0"
 					title="Carrier"
-					hits={this.state.player[0]}
+          hits={this.state.participants[0][0]}
+          onShipHit={this.onShipHit}
 				/>
 				<Ship
-					entrant="player"
+					entrant="0"
 					shipNumber="1"
 					title="Battleship"
-					hits={this.state.player[1]}
+					hits={this.state.participants[0][1]}
+          onShipHit={this.onShipHit}
 				/>
 				<Ship
-					entrant="player"
+					entrant="0"
 					shipNumber="2"
 					title="Destroyer"
-					hits={this.state.player[2]}
+					hits={this.state.participants[0][2]}
+          onShipHit={this.onShipHit}
 				/>
 				<Ship
-					entrant="player"
+					entrant="0"
 					shipNumber="3"
 					title="Submarine"
-					hits={this.state.player[3]}
+					hits={this.state.participants[0][3]}
+          onShipHit={this.onShipHit}
 				/>
 				<Ship
-					entrant="player"
+					entrant="0"
 					shipNumber="4"
 					title="Patrol"
-					hits={this.state.player[4]}
+          hits={this.state.participants[0][4]}
+          onShipHit={this.onShipHit}
 				/>
 			</div>
 		);

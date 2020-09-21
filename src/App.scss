@@ -1,0 +1,26 @@
+@import "reset";
+
+$cell-length: 45px;
+
+body {
+	height: 100vh;
+}
+
+#root {
+	height: 100%;
+}
+
+.ship-cell {
+	width: $cell-length;
+	height: $cell-length;
+	box-sizing: border-box;
+	border: 1px solid black;
+}
+
+.hit-cell {
+	width: $cell-length;
+	height: $cell-length;
+	box-sizing: border-box;
+    border: 1px solid black;
+    background-color: black;
+}
