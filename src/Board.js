@@ -2,35 +2,46 @@ import React, { Component } from "react";
 
 class Board extends Component {
 	drop = (e) => {
-        console.log(e.target)
         e.preventDefault();
-        console.log(e.dataTransfer)
-        const shipID = e.dataTransfer.getData("id");
-        const ship = document.getElementById(shipID)
-        const shipArea = ship.getAttribute('data-value')
         
-        e.target.classList.remove('naw')
-        e.target.classList.add('ship-cell')
-        e.target.setAttribute("data-value", "ship")
-        e.target.setAttribute("data-ship-name", shipID)
-        e.target.setAttribute("data-ship-area", shipArea)
+		const shipID = e.dataTransfer.getData("id");
+		const ship = document.getElementById(shipID);
+		const shipLength = ship.childElementCount;
+
+        let cellArray = [];
+        let multiplier = (ship.orientation === "horizontal"? 1 : 10)
+		for (let i = 0; i < shipLength; i++) {
+				cellArray.push(Number(e.target.getAttribute("name")) + i * multiplier);
+		}
+		
+
+		this.distributeShip(cellArray, shipID);
 	};
 
-    dragOver = e => {
-        e.preventDefault();
-    }
+	distributeShip(cellArray, shipID) {
+        console.log(cellArray)
+		const boardID = `board-${this.props.entrantNumber}`;
+        const board = document.getElementById(boardID);
+        console.log(board)
+		for (let [index, cell] of cellArray.entries()) {
+			board.childNodes[cell].classList.remove("naw");
+			board.childNodes[cell].classList.add("ship-cell");
+			board.childNodes[cell].setAttribute("data-value", "ship");
+			board.childNodes[cell].setAttribute("data-ship-name", shipID);
+			board.childNodes[cell].setAttribute("data-ship-area", index);
+		}
+	}
+
+	dragOver = (e) => {
+		e.preventDefault();
+	};
 
 	hit = (e) => {
-        console.log(
-            e.target.getAttribute("data-value"),
-			e.target.getAttribute("name"), // index
-			this.props.entrantNumber
-        )
 		this.props.onBoardHit(
 			e.target.getAttribute("data-value"),
-            e.target.getAttribute("name"), // index
-            e.target.getAttribute('data-ship-name'),
-            e.target.getAttribute('data-ship-area'),
+			e.target.getAttribute("name"), // index
+			e.target.getAttribute("data-ship-name"),
+			e.target.getAttribute("data-ship-area"),
 			this.props.entrantNumber
 		);
 	};
@@ -42,16 +53,20 @@ class Board extends Component {
 				className={`cell ${cell}`}
 				data-value={cell}
 				name={index}
-                key={index}
-                id={`${this.props.entrantNumber}-${index}`}
+				key={index}
+				id={`${this.props.entrantNumber}-${index}`}
 				onClick={this.hit}
-                onDrop={this.drop}
-                onDragOver={this.dragOver}
+				onDrop={this.drop}
+				onDragOver={this.dragOver}
 			>
 				{this.props.ship || ""}
 			</div>
 		));
-		return <div className="board">{cellsDisplay}</div>;
+		return (
+			<div className="board" id={`board-${this.props.entrantNumber}`}>
+				{cellsDisplay}
+			</div>
+		);
 	}
 }
 

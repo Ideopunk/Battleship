@@ -117,7 +117,7 @@ class App extends Component {
 					<Board
 						entrantNumber="0"
 						cells={this.state.participants[0].board}
-						onBoardHit={this.onBoardHit}
+            onBoardHit={this.onBoardHit}
 					/>
 				</div>
 				<div className="pieces">
