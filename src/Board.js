@@ -2,14 +2,18 @@ import React, { Component } from "react";
 
 class Board extends Component {
 	drop = (e) => {
+        console.log(e.target)
         e.preventDefault();
         console.log(e.dataTransfer)
-		const shipName = e.dataTransfer.getData("id");
-		const shipArea = e.dataTransfer.getData("shipArea");
-		const ship = document.getElementById(shipName);
-        ship.style.display = "block";
+        const shipID = e.dataTransfer.getData("id");
+        const ship = document.getElementById(shipID)
+        const shipArea = ship.getAttribute('data-value')
         
-		e.target.appendChild(ship);
+        e.target.classList.remove('naw')
+        e.target.classList.add('ship-cell')
+        e.target.setAttribute("data-value", "ship")
+        e.target.setAttribute("data-ship-name", shipID)
+        e.target.setAttribute("data-ship-area", shipArea)
 	};
 
     dragOver = e => {
@@ -17,9 +21,16 @@ class Board extends Component {
     }
 
 	hit = (e) => {
+        console.log(
+            e.target.getAttribute("data-value"),
+			e.target.getAttribute("name"), // index
+			this.props.entrantNumber
+        )
 		this.props.onBoardHit(
 			e.target.getAttribute("data-value"),
-			e.target.getAttribute("name"), // index
+            e.target.getAttribute("name"), // index
+            e.target.getAttribute('data-ship-name'),
+            e.target.getAttribute('data-ship-area'),
 			this.props.entrantNumber
 		);
 	};

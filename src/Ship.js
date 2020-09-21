@@ -3,8 +3,7 @@ import React, { Component } from "react";
 class Ship extends Component {
 	hit = (e) => {
 		this.props.onShipHit(
-			e.target.getAttribute("data-value"), // ship status
-			e.target.getAttribute("name"), // ship areat
+			e.target.getAttribute("name"), // ship area
 			e.target.parentNode.getAttribute("data-value"), // ship number
 			this.props.entrant // entrant number
 		);
@@ -12,7 +11,9 @@ class Ship extends Component {
 
     dragStart = e => {
         const target = e.target;
+        console.log(target)
         e.dataTransfer.setData('id', e.target.id)
+        // e.dataTransfer.setData('data-value', e.target.getAttribute("data-value"))
         // e.dataTransfer.setData('ship-length', e.target.childElementCount)
     }
 
@@ -39,7 +40,8 @@ class Ship extends Component {
 				className={`ship ${this.props.title} ${
 					this.props.sunk === true ? "sunk" : null
 				}`}
-				data-value={this.props.shipNumber}
+                data-value={this.props.shipNumber}
+                data-orientation={this.props.orientation}
                 draggable="true"
                 onDragStart={this.dragStart}
                 onDragOver={this.dragOver}

@@ -32,10 +32,11 @@ body {
 	width: $cell-length;
 	height: $cell-length;
 	box-sizing: border-box;
-	border: 1px solid red;
+    border: 1px solid red;
+    background-color: red;
 }
 
-.hit-cell {
+.hit {
 	width: $cell-length;
 	height: $cell-length;
 	box-sizing: border-box;

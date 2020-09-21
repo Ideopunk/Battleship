@@ -27,6 +27,7 @@ class App extends Component {
 				board: new Array(100).fill("naw"),
 			},
 		],
+		orientation: "vertical",
 	};
 
 	state = {
@@ -52,24 +53,28 @@ class App extends Component {
 				board: new Array(100).fill("naw"),
 			},
 		],
+		orientation: "horizontal",
 	};
 
-  onBoardHit = (status, boardIndex, entrantNumber) => {
-    const currentState = this.state
-    if (status === "naw") {
-      currentState.participants[entrantNumber].board[boardIndex] = "miss"
-    } else if (status === "ship") {
-      currentState.participants[entrantNumber].board[boardIndex] = "hit"
-    }
+	onBoardHit = (status, boardIndex, shipName, shipArea, entrantNumber) => {
+		const currentState = this.state;
+		if (status === "naw") {
+			currentState.participants[entrantNumber].board[boardIndex] = "miss";
+		} else if (status === "ship") {
+			currentState.participants[entrantNumber].board[boardIndex] = "hit";
+			this.onShipHit(shipArea, boardIndex, entrantNumber);
+		}
 
-    this.setState(currentState)
-    return;
-  }
+		this.setState(currentState);
+		return;
+	};
 
-	onShipHit = (status, shipArea, shipNumber, entrantNumber) => {
+	onShipHit = (shipArea, shipNumber, entrantNumber) => {
 		entrantNumber = Number(entrantNumber);
 		const currentState = this.state;
-		currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
+		currentState.participants[entrantNumber].ships[shipNumber][
+			shipArea
+		] = true;
 		this.setState(currentState);
 		this.winCheck(entrantNumber);
 	};
@@ -86,24 +91,41 @@ class App extends Component {
 
 	winCelebration = (entrantNumber) => {
 		if (entrantNumber === 0) {
-      alert(`You win!!!`);
-    } else {
-      alert(`Computer wins!!`)
-    }
+			alert(`You win!!!`);
+		} else {
+			alert(`Computer wins!!`);
+		}
 		this.setState(this.initialState);
 	};
+
+  changeOrientation = () => {
+    let newOrientation;
+    if (this.state.orientation === "horizontal") {
+      newOrientation = "vertical"
+    } else {
+      newOrientation = "horizontal"
+    }
+    this.setState({
+      orientation: newOrientation
+    })
+  }
 
 	render() {
 		return (
 			<div className="App">
 				<div className="boards">
-					<Board entrantNumber="0" cells={this.state.participants[0].board} onBoardHit={this.onBoardHit}/>
+					<Board
+						entrantNumber="0"
+						cells={this.state.participants[0].board}
+						onBoardHit={this.onBoardHit}
+					/>
 				</div>
 				<div className="pieces">
 					<Ship
 						entrant="0"
 						shipNumber="0"
-						title="Carrier"
+            title="Carrier"
+            orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[0]}
 						sunk={
 							this.state.participants[0].ships[0].some(
@@ -118,6 +140,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="1"
 						title="Battleship"
+            orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[1]}
 						sunk={
 							this.state.participants[0].ships[1].some(
@@ -132,6 +155,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="2"
 						title="Destroyer"
+            orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[2]}
 						sunk={
 							this.state.participants[0].ships[2].some(
@@ -146,6 +170,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="3"
 						title="Submarine"
+            orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[3]}
 						sunk={
 							this.state.participants[0].ships[3].some(
@@ -160,6 +185,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="4"
 						title="Patrol"
+            orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[4]}
 						sunk={
 							this.state.participants[0].ships[4].some(
