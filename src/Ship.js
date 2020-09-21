@@ -11,7 +11,6 @@ class Ship extends Component {
 	};
 
 	render() {
-		console.log(this.props);
 		const divs = this.props.hits.map((hit, index) => (
 			<div
                 key={index}
@@ -23,7 +22,7 @@ class Ship extends Component {
 		));
 
 		return (
-			<div className={`${this.props.title} + ${this.props.sunk === true? "sunk" : null}`} data-value={this.props.shipNumber}>
+			<div className={`ship ${this.props.title} ${this.props.sunk === true? "sunk" : null}`} data-value={this.props.shipNumber} draggable="true">
 				{divs}
 			</div>
 		);

@@ -1,16 +1,16 @@
 Begin your app by creating the Ship factory function.
 
-    SOMEWHAT Your ‘ships’ will be objects that include their length, where they’ve been hit and whether or not they’ve been sunk.
+    YES Your ‘ships’ will be objects that include their length, where they’ve been hit and whether or not they’ve been sunk.
 
-    you only have to test your object’s public interface. Only methods or properties that are used outside of your ‘ship’ object need unit tests.
+    SURE you only have to test your object’s public interface. Only methods or properties that are used outside of your ‘ship’ object need unit tests.
 
-    Ships should have a hit() function that takes a number and then marks that position as ‘hit’.
+    YUP Ships should have a hit() function that takes a number and then marks that position as ‘hit’.
 
-    isSunk() should be a function that calculates it based on their length and whether all of their positions are ‘hit’.
+    NAW isSunk() should be a function that calculates it based on their length and whether all of their positions are ‘hit’.
 
 Create Gameboard factory.
 
-    Note that we have not yet created any User Interface. We should know our code is coming together by running the tests. You shouldn’t be relying on console.logs or DOM methods to make sure your code is doing what you expect it to.
+    NO. Note that we have not yet created any User Interface. We should know our code is coming together by running the tests. You shouldn’t be relying on console.logs or DOM methods to make sure your code is doing what you expect it to.
 
     Gameboards should be able to place ships at specific coordinates by calling the ship factory function
 
@@ -38,9 +38,8 @@ Create Player.
 
     The game loop should step through the game turn by turn using only methods from other objects. If at any point you are tempted to write a new function inside the game loop, step back and figure out which class or module that function should belong to.
 
-    Create conditions so that the game ends once one players ships have all been sunk. This function is appropriate for the Game module.
+    COMPLETE Create conditions so that the game ends once one players ships have all been sunk. This function is appropriate for the Game module.
 
-    SELF: Ships collection should report if all ships are sunk
 Finish it up
 
     There are several options available for letting users place their ships. You can let them type coordinates for each ship, or investigate implementing drag and drop.
