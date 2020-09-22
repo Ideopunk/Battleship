@@ -63,10 +63,22 @@ class App extends Component {
 		const shipLength = ship.childElementCount;
 		const orientation = ship.getAttribute("data-orientation");
 		let cellArray = [];
-		let multiplier = orientation === "horizontal" ? 1 : 10;
-		for (let i = 0; i < shipLength; i++) {
-			cellArray.push(cellIndex + i * multiplier);
-		}
+    let multiplier = orientation === "horizontal" ? 1 : 10;
+    try {
+      for (let i = 0; i < shipLength; i++) {
+        let newCellIndex = cellIndex + i * multiplier
+        if (newCellIndex > 99) {
+          throw new Error("yr off the board")
+        } else if (this.state.participants[entrantNumber].board[newCellIndex] === "ship") {
+          throw new Error("yr on another ship bud")
+        }
+        cellArray.push(cellIndex + i * multiplier);
+      }
+    } catch(e) {
+      console.log(e)
+      return
+    }
+		
 
 		this.distributeShip(cellArray, shipID, entrantNumber);
 
