@@ -13,8 +13,6 @@ class Ship extends Component {
         const target = e.target;
         console.log(target)
         e.dataTransfer.setData('id', e.target.id)
-        // e.dataTransfer.setData('data-value', e.target.getAttribute("data-value"))
-        // e.dataTransfer.setData('ship-length', e.target.childElementCount)
     }
 
     dragOver = e => {

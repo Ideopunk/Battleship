@@ -3,17 +3,20 @@
 $cell-length: 45px;
 
 body {
-	height: 100vh;
+    height: 100vh;
+    width: 100%;
 }
 
-#root {
-	height: 100%;
-}
+// #root {
+//     height: 100%;
+//     width: 100%;
+// }
 
 .boards {
     width: 100%;
     justify-content: space-around;
-    margin: 2rem;
+    padding: 2rem;
+    box-sizing: border-box;
     display: flex;
 }
 
@@ -62,6 +65,5 @@ body {
 .pieces {
     height: 500px;
     display: flex;
-    flex-direction: column;
     justify-content: space-around;
 }

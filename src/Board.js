@@ -1,37 +1,14 @@
 import React, { Component } from "react";
 
 class Board extends Component {
+
+    // separate this until drop function is just giving a shipID and e.target.getAttribute(name) and passing them to the next function.
 	drop = (e) => {
         e.preventDefault();
-        
-		const shipID = e.dataTransfer.getData("id");
-		const ship = document.getElementById(shipID);
-		const shipLength = ship.childElementCount;
-        const orientation = ship.getAttribute("data-orientation")
-        let cellArray = [];
-        let multiplier = (orientation === "horizontal"? 1 : 10)
-		for (let i = 0; i < shipLength; i++) {
-				cellArray.push(Number(e.target.getAttribute("name")) + i * multiplier);
-		}
-		
-
-		this.distributeShip(cellArray, shipID);
+        const shipID = e.dataTransfer.getData("id");
+        console.log(this.props.entrantNumber)
+        this.props.placeShip(shipID, Number(e.target.getAttribute("name")), this.props.entrantNumber)
 	};
-
-	distributeShip(cellArray, shipID) {
-        console.log(cellArray)
-		const boardID = `board-${this.props.entrantNumber}`;
-        const board = document.getElementById(boardID);
-        console.log(board)
-		for (let [index, cell] of cellArray.entries()) {
-			// board.childNodes[cell].classList.remove("naw");
-			// board.childNodes[cell].classList.add("ship-cell"); // should be setstate
-            // board.childNodes[cell].setAttribute("data-value", "ship"); // should be set state
-            this.props.onShipPlacement(cell, this.props.entrantNumber)
-			board.childNodes[cell].setAttribute("data-ship-name", shipID);
-			board.childNodes[cell].setAttribute("data-ship-area", index);
-		}
-	}
 
 	dragOver = (e) => {
 		e.preventDefault();

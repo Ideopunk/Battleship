@@ -57,40 +57,66 @@ class App extends Component {
 		orientation: "horizontal",
 	};
 
-	onShipPlacement = (boardArrayIndex, entrantNumber) => {
-    let currentState = this.state
-    console.log(boardArrayIndex, entrantNumber)
-    currentState.participants[entrantNumber].board[boardArrayIndex] = "ship"
-    this.setState(currentState)
-  };
+	placeShip = (shipID, cellIndex, entrantNumber) => {
+		console.log(shipID, cellIndex, entrantNumber);
+		const ship = document.getElementById(shipID);
+		const shipLength = ship.childElementCount;
+		const orientation = ship.getAttribute("data-orientation");
+		let cellArray = [];
+		let multiplier = orientation === "horizontal" ? 1 : 10;
+		for (let i = 0; i < shipLength; i++) {
+			cellArray.push(cellIndex + i * multiplier);
+		}
+
+		this.distributeShip(cellArray, shipID, entrantNumber);
+
+		// // computer portion
+		// this.distributeShip(,,1)
+	};
+
+	distributeShip = (cellArray, shipID, entrantNumber) => {
+		const boardID = `board-${entrantNumber}`;
+		const board = document.getElementById(boardID);
+		for (let [index, cell] of cellArray.entries()) {
+			this.boardStateUpdate(cell, entrantNumber);
+			board.childNodes[cell].setAttribute("data-ship-name", shipID);
+			board.childNodes[cell].setAttribute("data-ship-area", index);
+		}
+	};
+
+	boardStateUpdate = (boardArrayIndex, entrantNumber) => {
+		let currentState = this.state;
+		console.log(boardArrayIndex, entrantNumber);
+		currentState.participants[entrantNumber].board[boardArrayIndex] =
+			"ship";
+		this.setState(currentState);
+	};
 
 	playerTurnEnd = (status, boardIndex) => {
-    try {
-      if (status !== "naw" && status !== "ship") {
-        throw new Error(`ya can't click there`)
-      }
-    } catch(e) {
-      console.log(`You can't click there!!`)
-      return
-    }
+		try {
+			if (status !== "naw" && status !== "ship") {
+				throw new Error(`ya can't click there`);
+			}
+		} catch (e) {
+			console.log(`You can't click there!!`);
+			return;
+		}
 
-    this.onBoardHit(status, boardIndex, 1);
+		this.onBoardHit(status, boardIndex, 1);
 
-    // get a good hit from the computer
-    let computerAttackIndex, computerStatus;
-    while (this.state.participants[0].board[computerAttackIndex] !== "ship" && this.state.participants[0].board[computerAttackIndex] !== "naw") {
-      computerAttackIndex = computer.attack()
-      computerStatus = this.state.participants[0].board[computerAttackIndex]
-      console.log(computerAttackIndex, computerStatus)
-    }
+		// get a good hit from the computer
+		let computerAttackIndex, computerStatus;
+		while (
+			this.state.participants[0].board[computerAttackIndex] !== "ship" &&
+			this.state.participants[0].board[computerAttackIndex] !== "naw"
+		) {
+			computerAttackIndex = computer.attack();
+			computerStatus = this.state.participants[0].board[
+				computerAttackIndex
+			];
+		}
 
-    //fake 
-    // const computerAttackIndex = 0
-    // const computerStatus = "naw"
-
-    console.log(computerAttackIndex)
-
-    this.onBoardHit(computerStatus,computerAttackIndex,0)
+		this.onBoardHit(computerStatus, computerAttackIndex, 0);
 	};
 
 	onBoardHit = (status, boardIndex, entrantNumber) => {
@@ -98,12 +124,12 @@ class App extends Component {
 		if (status === "naw") {
 			currentState.participants[entrantNumber].board[boardIndex] = "miss";
 		} else if (status === "ship") {
-      currentState.participants[entrantNumber].board[boardIndex] = "hit";
+			currentState.participants[entrantNumber].board[boardIndex] = "hit";
 
-      // extract ship area from doc
-      const ID = `${entrantNumber}-${boardIndex}`
-      const cell = document.getElementById(ID)
-      const shipArea = cell.getAttribute('data-ship-area')
+			// extract ship area from doc
+			const ID = `${entrantNumber}-${boardIndex}`;
+			const cell = document.getElementById(ID);
+			const shipArea = cell.getAttribute("data-ship-area");
 			this.onShipHit(shipArea, boardIndex, entrantNumber);
 		}
 
@@ -113,6 +139,7 @@ class App extends Component {
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
 		const currentState = this.state;
+		console.log(this.state);
 		currentState.participants[entrantNumber].ships[shipNumber][
 			shipArea
 		] = true;
@@ -152,104 +179,62 @@ class App extends Component {
 	};
 
 	render() {
+		const board = (entrantNumber) => (
+			<Board
+				entrantNumber={entrantNumber}
+				placeShip={this.placeShip}
+				cells={this.state.participants[entrantNumber].board}
+				boardHit={this.playerTurnEnd}
+				onShipPlacement={this.onShipPlacement}
+			/>
+		);
+
+		const ship = (entrantNumber, shipNumber, title) => (
+			<Ship
+				entrant={entrantNumber}
+				shipNumber={shipNumber}
+				title={title}
+				orientation={this.state.orientation}
+				hits={this.state.participants[entrantNumber].ships[shipNumber]}
+				sunk={
+					this.state.participants[entrantNumber].ships[
+						shipNumber
+					].some((part) => part === false)
+						? false
+						: true
+				}
+				onShipHit={this.onShipHit}
+			/>
+		);
+
 		return (
 			<div className="App">
 				<div className="boards">
 					<div>
 						<h2>Set up your board</h2>
-						<Board
-							entrantNumber="0"
-							cells={this.state.participants[0].board}
-							onShipPlacement={this.onShipPlacement}
-						/>
+						{board(0)}
 					</div>
 					<div>
 						<h2>Opponent board</h2>
-						<Board
-							entrantNumber="1"
-							cells={this.state.participants[1].board}
-							boardHit={this.playerTurnEnd}
-							onShipPlacement={this.onShipPlacement}
-						/>
+						{board(1)}
 					</div>
 				</div>
 
 				<div className="pieces">
-					<Ship
-						entrant="0"
-						shipNumber="0"
-						title="Carrier"
-						orientation={this.state.orientation}
-						hits={this.state.participants[0].ships[0]}
-						sunk={
-							this.state.participants[0].ships[0].some(
-								(part) => part === false
-							)
-								? false
-								: true
-						}
-						onShipHit={this.onShipHit}
-					/>
-					<Ship
-						entrant="0"
-						shipNumber="1"
-						title="Battleship"
-						orientation={this.state.orientation}
-						hits={this.state.participants[0].ships[1]}
-						sunk={
-							this.state.participants[0].ships[1].some(
-								(part) => part === false
-							)
-								? false
-								: true
-						}
-						onShipHit={this.onShipHit}
-					/>
-					<Ship
-						entrant="0"
-						shipNumber="2"
-						title="Destroyer"
-						orientation={this.state.orientation}
-						hits={this.state.participants[0].ships[2]}
-						sunk={
-							this.state.participants[0].ships[2].some(
-								(part) => part === false
-							)
-								? false
-								: true
-						}
-						onShipHit={this.onShipHit}
-					/>
-					<Ship
-						entrant="0"
-						shipNumber="3"
-						title="Submarine"
-						orientation={this.state.orientation}
-						hits={this.state.participants[0].ships[3]}
-						sunk={
-							this.state.participants[0].ships[3].some(
-								(part) => part === false
-							)
-								? false
-								: true
-						}
-						onShipHit={this.onShipHit}
-					/>
-					<Ship
-						entrant="0"
-						shipNumber="4"
-						title="Patrol"
-						orientation={this.state.orientation}
-						hits={this.state.participants[0].ships[4]}
-						sunk={
-							this.state.participants[0].ships[4].some(
-								(part) => part === false
-							)
-								? false
-								: true
-						}
-						onShipHit={this.onShipHit}
-					/>
+					<div className="player-pieces">
+						{ship(0, 0, "Carrier")}
+						{ship(0, 1, "Battleship")}
+						{ship(0, 2, "Destroyer")}
+						{ship(0, 3, "Submarine")}
+						{ship(0, 4, "Patrol")}
+					</div>
+					<div className="computer-pieces">
+						{ship(1, 0, "Carrier")}
+						{ship(1, 1, "Battleship")}
+						{ship(1, 2, "Destroyer")}
+						{ship(1, 3, "Submarine")}
+						{ship(1, 4, "Patrol")}
+					</div>
 				</div>
 			</div>
 		);
