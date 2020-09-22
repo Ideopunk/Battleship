@@ -10,6 +10,13 @@ body {
 	height: 100%;
 }
 
+.boards {
+    width: 100%;
+    justify-content: space-around;
+    margin: 2rem;
+    display: flex;
+}
+
 .board {
     width: $cell-length * 10;
     height: $cell-length * 10;

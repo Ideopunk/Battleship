@@ -7,9 +7,9 @@ class Board extends Component {
 		const shipID = e.dataTransfer.getData("id");
 		const ship = document.getElementById(shipID);
 		const shipLength = ship.childElementCount;
-
+        const orientation = ship.getAttribute("data-orientation")
         let cellArray = [];
-        let multiplier = (ship.orientation === "horizontal"? 1 : 10)
+        let multiplier = (orientation === "horizontal"? 1 : 10)
 		for (let i = 0; i < shipLength; i++) {
 				cellArray.push(Number(e.target.getAttribute("name")) + i * multiplier);
 		}
@@ -37,13 +37,19 @@ class Board extends Component {
 	};
 
 	hit = (e) => {
-		this.props.onBoardHit(
-			e.target.getAttribute("data-value"),
-			e.target.getAttribute("name"), // index
-			e.target.getAttribute("data-ship-name"),
-			e.target.getAttribute("data-ship-area"),
-			this.props.entrantNumber
-		);
+        try {
+            this.props.boardHit(
+                e.target.getAttribute("data-value"),
+                e.target.getAttribute("name"), // index
+                e.target.getAttribute("data-ship-name"),
+                e.target.getAttribute("data-ship-area"),
+                this.props.entrantNumber
+            ) 
+        } catch(e){
+            console.log(e)
+            console.log('wrong board pal')
+        }
+		
 	};
 
 	render() {

@@ -27,7 +27,7 @@ class App extends Component {
 				board: new Array(100).fill("naw"),
 			},
 		],
-		orientation: "vertical",
+		orientation: "horizontal",
 	};
 
 	state = {
@@ -55,6 +55,14 @@ class App extends Component {
 		],
 		orientation: "horizontal",
 	};
+
+  onShipPlacement = () => {
+    
+  }
+
+  playerTurnEnd = (status, boardIndex, shipName, shipArea, entrantNumber) => {
+    this.onBoardHit(status, boardIndex, shipName, shipArea, entrantNumber)
+  }
 
 	onBoardHit = (status, boardIndex, shipName, shipArea, entrantNumber) => {
 		const currentState = this.state;
@@ -114,12 +122,23 @@ class App extends Component {
 		return (
 			<div className="App">
 				<div className="boards">
-					<Board
-						entrantNumber="0"
-						cells={this.state.participants[0].board}
-            onBoardHit={this.onBoardHit}
-					/>
+          <div>
+            <h2>Set up your board</h2>
+            <Board
+              entrantNumber="0"
+              cells={this.state.participants[0].board}
+            />
+          </div>
+          <div>
+            <h2>Opponent board</h2>
+            <Board
+              entrantNumber="1"
+              cells={this.state.participants[1].board}
+              boardHit={this.playerTurnEnd}
+            />
+          </div>
 				</div>
+
 				<div className="pieces">
 					<Ship
 						entrant="0"
