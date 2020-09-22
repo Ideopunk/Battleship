@@ -66,25 +66,31 @@ class App extends Component {
 
 	playerTurnEnd = (status, boardIndex) => {
     try {
-      if (status !== "miss" && status !== "hit") {
+      if (status !== "naw" && status !== "ship") {
         throw new Error(`ya can't click there`)
       }
     } catch(e) {
       console.log(`You can't click there!!`)
+      return
     }
 
-    this.onBoardHit(status, boardIndex, 0);
+    this.onBoardHit(status, boardIndex, 1);
 
     // get a good hit from the computer
     let computerAttackIndex, computerStatus;
-    while (this.state.participants[0].board[computerAttackIndex] !== "ship" || "naw") {
+    while (this.state.participants[0].board[computerAttackIndex] !== "ship" && this.state.participants[0].board[computerAttackIndex] !== "naw") {
       computerAttackIndex = computer.attack()
       computerStatus = this.state.participants[0].board[computerAttackIndex]
+      console.log(computerAttackIndex, computerStatus)
     }
-    
+
+    //fake 
+    // const computerAttackIndex = 0
+    // const computerStatus = "naw"
+
     console.log(computerAttackIndex)
 
-    this.onBoardHit(computerStatus,computerAttackIndex,1)
+    this.onBoardHit(computerStatus,computerAttackIndex,0)
 	};
 
 	onBoardHit = (status, boardIndex, entrantNumber) => {
