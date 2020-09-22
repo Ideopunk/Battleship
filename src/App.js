@@ -54,11 +54,13 @@ class App extends Component {
 				board: new Array(100).fill("naw"),
 			},
 		],
-		orientation: "horizontal",
+    orientation: "horizontal",
+    gamestart: false
 	};
 
 	// SHIP PLACEMENT STUFF
 
+  // Computer ship placement
 	computerPlaceShip = (shipID) => {
     const ship = document.getElementById(shipID);
 		const length = ship.childElementCount;
@@ -81,6 +83,20 @@ class App extends Component {
 	};
 
 	computerPlaceShips = () => {
+    console.log(this.state.gamestart)
+    try {
+      if (this.state.gamestart === true) {
+        throw new Error('Game already started lol')
+      }
+    } catch(e) {
+      console.log(e)
+      return
+    }
+
+    let currentState = this.state
+    currentState.gamestart = true;
+    this.setState(currentState, () => console.log(this.state))
+
 		const names = [
 			"Carrier",
 			"Battleship",
@@ -98,6 +114,7 @@ class App extends Component {
 		}
 	};
 
+  // human ship placement
 	placeShip = (shipID, cellIndex, entrantNumber) => {
 		console.log(shipID, cellIndex, entrantNumber);
 		const ship = document.getElementById(shipID);
