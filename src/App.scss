@@ -46,6 +46,7 @@ body {
     background-color: red;
 }
 
+
 .hit {
 	width: $cell-length;
 	height: $cell-length;
@@ -62,8 +63,25 @@ body {
 	display: flex;
 }
 
+.vertical {
+    flex-direction: column;
+}
+
 .pieces {
-    height: 500px;
+    box-sizing: border-box;
+    height: 150px;
     display: flex;
     justify-content: space-around;
+    width: 100%;
+}
+
+.entrant-pieces {
+    box-sizing: border-box;
+    max-width: 500px;
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
 }

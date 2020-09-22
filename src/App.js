@@ -179,12 +179,12 @@ class App extends Component {
 	};
 
 	render() {
-		const board = (entrantNumber) => (
+		const board = (entrantNumber, boardHit) => (
 			<Board
 				entrantNumber={entrantNumber}
 				placeShip={this.placeShip}
 				cells={this.state.participants[entrantNumber].board}
-				boardHit={this.playerTurnEnd}
+				boardHit={boardHit}
 				onShipPlacement={this.onShipPlacement}
 			/>
 		);
@@ -209,26 +209,29 @@ class App extends Component {
 
 		return (
 			<div className="App">
+        <div className="commands">
+          <button onClick={this.changeOrientation}>Change ship orientation</button>
+        </div>
 				<div className="boards">
 					<div>
 						<h2>Set up your board</h2>
-						{board(0)}
+						{board(0, null)}
 					</div>
 					<div>
 						<h2>Opponent board</h2>
-						{board(1)}
+						{board(1, this.playerTurnEnd)}
 					</div>
 				</div>
 
 				<div className="pieces">
-					<div className="player-pieces">
+					<div className="entrant-pieces">
 						{ship(0, 0, "Carrier")}
 						{ship(0, 1, "Battleship")}
 						{ship(0, 2, "Destroyer")}
 						{ship(0, 3, "Submarine")}
 						{ship(0, 4, "Patrol")}
 					</div>
-					<div className="computer-pieces">
+					<div className="entrant-pieces">
 						{ship(1, 0, "Carrier")}
 						{ship(1, 1, "Battleship")}
 						{ship(1, 2, "Destroyer")}
