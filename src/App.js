@@ -57,33 +57,74 @@ class App extends Component {
 		orientation: "horizontal",
 	};
 
+	// SHIP PLACEMENT STUFF
+
+	computerPlaceShip = (shipID) => {
+    const ship = document.getElementById(shipID);
+		const length = ship.childElementCount;
+		const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
+    const multiplier = orientation === "horizontal" ? 1 : 10;
+		const cellIndex = computer.boardpoint(length, orientation);
+    
+		let cellArray = [];
+
+		for (let i = 0; i < length; i++) {
+			let newCellIndex = cellIndex + i * multiplier;
+			if (this.state.participants[1].board[newCellIndex] === "ship") {
+				cellArray = [];
+				break;
+			}
+			cellArray.push(cellIndex + i * multiplier);
+		}
+
+		return cellArray;
+	};
+
+	computerPlaceShips = () => {
+		const names = [
+			"Carrier",
+			"Battleship",
+			"Destroyer",
+			"Submarine",
+			"Patrol",
+		];
+		const compNames = names.map((name) => `1-${name}`);
+		for (let compName of compNames) {
+			let cellArray = [];
+			while (cellArray.length < 1) {
+				cellArray = this.computerPlaceShip(compName);
+			}
+			this.distributeShip(cellArray, compName, 1);
+		}
+	};
+
 	placeShip = (shipID, cellIndex, entrantNumber) => {
 		console.log(shipID, cellIndex, entrantNumber);
 		const ship = document.getElementById(shipID);
 		const shipLength = ship.childElementCount;
 		const orientation = ship.getAttribute("data-orientation");
 		let cellArray = [];
-    let multiplier = orientation === "horizontal" ? 1 : 10;
-    try {
-      for (let i = 0; i < shipLength; i++) {
-        let newCellIndex = cellIndex + i * multiplier
-        if (newCellIndex > 99) {
-          throw new Error("yr off the board")
-        } else if (this.state.participants[entrantNumber].board[newCellIndex] === "ship") {
-          throw new Error("yr on another ship bud")
-        }
-        cellArray.push(cellIndex + i * multiplier);
-      }
-    } catch(e) {
-      console.log(e)
-      return
-    }
-		
+		let multiplier = orientation === "horizontal" ? 1 : 10;
+		try {
+			for (let i = 0; i < shipLength; i++) {
+				let newCellIndex = cellIndex + i * multiplier;
+				if (newCellIndex > 99) {
+					throw new Error("yr off the board");
+				} else if (
+					this.state.participants[entrantNumber].board[
+						newCellIndex
+					] === "ship"
+				) {
+					throw new Error("yr on another ship bud");
+				}
+				cellArray.push(cellIndex + i * multiplier);
+			}
+		} catch (e) {
+			console.log(e);
+			return;
+		}
 
 		this.distributeShip(cellArray, shipID, entrantNumber);
-
-		// // computer portion
-		// this.distributeShip(,,1)
 	};
 
 	distributeShip = (cellArray, shipID, entrantNumber) => {
@@ -104,13 +145,15 @@ class App extends Component {
 		this.setState(currentState);
 	};
 
+	// TURN STUFF
+
 	playerTurnEnd = (status, boardIndex) => {
 		try {
 			if (status !== "naw" && status !== "ship") {
-				throw new Error(`ya can't click there`);
+				throw new Error(`you can't click there`);
 			}
 		} catch (e) {
-			console.log(`You can't click there!!`);
+			console.log(e);
 			return;
 		}
 
@@ -221,9 +264,14 @@ class App extends Component {
 
 		return (
 			<div className="App">
-        <div className="commands">
-          <button onClick={this.changeOrientation}>Change ship orientation</button>
-        </div>
+				<div className="commands">
+					<button onClick={this.changeOrientation}>
+						Change ship orientation
+					</button>
+          <button onClick={this.computerPlaceShips}>
+						Place computer ships
+					</button>
+				</div>
 				<div className="boards">
 					<div>
 						<h2>Set up your board</h2>
