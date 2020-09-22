@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Ship from "./Ship";
 import Board from "./Board";
 import "./App.scss";
+import * as computer from "./computer";
 
 class App extends Component {
 	initialState = {
@@ -63,16 +64,40 @@ class App extends Component {
     this.setState(currentState)
   };
 
-	playerTurnEnd = (status, boardIndex, shipName, shipArea, entrantNumber) => {
-		this.onBoardHit(status, boardIndex, shipName, shipArea, entrantNumber);
+	playerTurnEnd = (status, boardIndex) => {
+    try {
+      if (status !== "miss" && status !== "hit") {
+        throw new Error(`ya can't click there`)
+      }
+    } catch(e) {
+      console.log(`You can't click there!!`)
+    }
+
+    this.onBoardHit(status, boardIndex, 0);
+
+    // get a good hit from the computer
+    let computerAttackIndex, computerStatus;
+    while (this.state.participants[0].board[computerAttackIndex] !== "ship" || "naw") {
+      computerAttackIndex = computer.attack()
+      computerStatus = this.state.participants[0].board[computerAttackIndex]
+    }
+    
+    console.log(computerAttackIndex)
+
+    this.onBoardHit(computerStatus,computerAttackIndex,1)
 	};
 
-	onBoardHit = (status, boardIndex, shipName, shipArea, entrantNumber) => {
+	onBoardHit = (status, boardIndex, entrantNumber) => {
 		const currentState = this.state;
 		if (status === "naw") {
 			currentState.participants[entrantNumber].board[boardIndex] = "miss";
 		} else if (status === "ship") {
-			currentState.participants[entrantNumber].board[boardIndex] = "hit";
+      currentState.participants[entrantNumber].board[boardIndex] = "hit";
+
+      // extract ship area from doc
+      const ID = `${entrantNumber}-${boardIndex}`
+      const cell = document.getElementById(ID)
+      const shipArea = cell.getAttribute('data-ship-area')
 			this.onShipHit(shipArea, boardIndex, entrantNumber);
 		}
 
@@ -81,7 +106,6 @@ class App extends Component {
 	};
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
-		entrantNumber = Number(entrantNumber);
 		const currentState = this.state;
 		currentState.participants[entrantNumber].ships[shipNumber][
 			shipArea

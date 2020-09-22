@@ -42,9 +42,6 @@ class Board extends Component {
             this.props.boardHit(
                 e.target.getAttribute("data-value"),
                 e.target.getAttribute("name"), // index
-                e.target.getAttribute("data-ship-name"),
-                e.target.getAttribute("data-ship-area"),
-                this.props.entrantNumber
             ) 
         } catch(e){
             console.log(e)
