@@ -27,7 +27,7 @@ class Ship extends Component {
 				key={index}
 				name={index}
 				data-value={hit}
-				className={hit === false ? "ship-cell" : "hit-cell"}
+				className={hit === false ? "ship" : "hit"}
 				onClick={this.hit}
 				id={`${this.props.entrant}-${this.props.title}-${index}`}
 			></div>
@@ -37,7 +37,7 @@ class Ship extends Component {
 			<div
 				id={`${this.props.entrant}-${this.props.title}`}
 				name={this.props.title}
-				className={`ship ${this.props.title} ${
+				className={`ship-div ${this.props.title} ${
 					this.props.sunk === true ? "sunk" : null
 				}`}
                 data-value={this.props.shipNumber}

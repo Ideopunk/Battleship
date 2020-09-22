@@ -56,13 +56,16 @@ class App extends Component {
 		orientation: "horizontal",
 	};
 
-  onShipPlacement = () => {
-    
-  }
+	onShipPlacement = (boardArrayIndex, entrantNumber) => {
+    let currentState = this.state
+    console.log(boardArrayIndex, entrantNumber)
+    currentState.participants[entrantNumber].board[boardArrayIndex] = "ship"
+    this.setState(currentState)
+  };
 
-  playerTurnEnd = (status, boardIndex, shipName, shipArea, entrantNumber) => {
-    this.onBoardHit(status, boardIndex, shipName, shipArea, entrantNumber)
-  }
+	playerTurnEnd = (status, boardIndex, shipName, shipArea, entrantNumber) => {
+		this.onBoardHit(status, boardIndex, shipName, shipArea, entrantNumber);
+	};
 
 	onBoardHit = (status, boardIndex, shipName, shipArea, entrantNumber) => {
 		const currentState = this.state;
@@ -106,45 +109,47 @@ class App extends Component {
 		this.setState(this.initialState);
 	};
 
-  changeOrientation = () => {
-    let newOrientation;
-    if (this.state.orientation === "horizontal") {
-      newOrientation = "vertical"
-    } else {
-      newOrientation = "horizontal"
-    }
-    this.setState({
-      orientation: newOrientation
-    })
-  }
+	changeOrientation = () => {
+		let newOrientation;
+		if (this.state.orientation === "horizontal") {
+			newOrientation = "vertical";
+		} else {
+			newOrientation = "horizontal";
+		}
+		this.setState({
+			orientation: newOrientation,
+		});
+	};
 
 	render() {
 		return (
 			<div className="App">
 				<div className="boards">
-          <div>
-            <h2>Set up your board</h2>
-            <Board
-              entrantNumber="0"
-              cells={this.state.participants[0].board}
-            />
-          </div>
-          <div>
-            <h2>Opponent board</h2>
-            <Board
-              entrantNumber="1"
-              cells={this.state.participants[1].board}
-              boardHit={this.playerTurnEnd}
-            />
-          </div>
+					<div>
+						<h2>Set up your board</h2>
+						<Board
+							entrantNumber="0"
+							cells={this.state.participants[0].board}
+							onShipPlacement={this.onShipPlacement}
+						/>
+					</div>
+					<div>
+						<h2>Opponent board</h2>
+						<Board
+							entrantNumber="1"
+							cells={this.state.participants[1].board}
+							boardHit={this.playerTurnEnd}
+							onShipPlacement={this.onShipPlacement}
+						/>
+					</div>
 				</div>
 
 				<div className="pieces">
 					<Ship
 						entrant="0"
 						shipNumber="0"
-            title="Carrier"
-            orientation={this.state.orientation}
+						title="Carrier"
+						orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[0]}
 						sunk={
 							this.state.participants[0].ships[0].some(
@@ -159,7 +164,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="1"
 						title="Battleship"
-            orientation={this.state.orientation}
+						orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[1]}
 						sunk={
 							this.state.participants[0].ships[1].some(
@@ -174,7 +179,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="2"
 						title="Destroyer"
-            orientation={this.state.orientation}
+						orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[2]}
 						sunk={
 							this.state.participants[0].ships[2].some(
@@ -189,7 +194,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="3"
 						title="Submarine"
-            orientation={this.state.orientation}
+						orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[3]}
 						sunk={
 							this.state.participants[0].ships[3].some(
@@ -204,7 +209,7 @@ class App extends Component {
 						entrant="0"
 						shipNumber="4"
 						title="Patrol"
-            orientation={this.state.orientation}
+						orientation={this.state.orientation}
 						hits={this.state.participants[0].ships[4]}
 						sunk={
 							this.state.participants[0].ships[4].some(

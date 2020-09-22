@@ -24,9 +24,10 @@ class Board extends Component {
         const board = document.getElementById(boardID);
         console.log(board)
 		for (let [index, cell] of cellArray.entries()) {
-			board.childNodes[cell].classList.remove("naw");
-			board.childNodes[cell].classList.add("ship-cell");
-			board.childNodes[cell].setAttribute("data-value", "ship");
+			// board.childNodes[cell].classList.remove("naw");
+			// board.childNodes[cell].classList.add("ship-cell"); // should be setstate
+            // board.childNodes[cell].setAttribute("data-value", "ship"); // should be set state
+            this.props.onShipPlacement(cell, this.props.entrantNumber)
 			board.childNodes[cell].setAttribute("data-ship-name", shipID);
 			board.childNodes[cell].setAttribute("data-ship-area", index);
 		}

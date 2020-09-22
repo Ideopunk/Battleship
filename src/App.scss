@@ -35,7 +35,7 @@ body {
  background-color: blue;
 }
 
-.ship-cell {
+.ship {
 	width: $cell-length;
 	height: $cell-length;
 	box-sizing: border-box;
@@ -55,7 +55,7 @@ body {
 	border: 1px solid red;
 }
 
-.ship {
+.ship-div {
 	display: flex;
 }
 
