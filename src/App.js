@@ -30,11 +30,11 @@ class App extends Component {
 			},
 		],
 		orientation: "horizontal",
-    gamestart: false,
-    message: "Pre-game nerves"
+		gamestart: false,
+		message: "Pre-game nerves",
 	};
 
-	state = this.initialState;
+	state = JSON.parse(JSON.stringify(this.initialState));
 
 	// SHIP PLACEMENT STUFF
 
@@ -73,6 +73,7 @@ class App extends Component {
 
 		let currentState = this.state;
 		currentState.gamestart = true;
+		currentState.message = "The game begins!";
 		this.setState(currentState, () => console.log(this.state));
 
 		const names = ["Carrier", "Battleship", "Destroyer", "Submarine", "Patrol"];
@@ -160,11 +161,11 @@ class App extends Component {
 	onBoardHit = (status, boardIndex, entrantNumber) => {
 		const currentState = this.state;
 		if (status === "naw") {
-      currentState.participants[entrantNumber].board[boardIndex] = "miss";
-      currentState.message = "Attack misses!"
+			currentState.participants[entrantNumber].board[boardIndex] = "miss";
+			currentState.message = "Attack misses!";
 		} else if (status === "ship") {
-      currentState.participants[entrantNumber].board[boardIndex] = "hit";
-      currentState.message = "Attack hits!"
+			currentState.participants[entrantNumber].board[boardIndex] = "hit";
+			currentState.message = "Attack hits!";
 
 			// extract ship area from doc
 			const ID = `${entrantNumber}-${boardIndex}`;
@@ -178,31 +179,31 @@ class App extends Component {
 	};
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
-    console.log('onshiphit!')
+		console.log("onshiphit!");
 		let currentState = this.state;
-    console.log(this.state);
-    console.log(currentState)
-    currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
-    console.log(currentState)
-    this.setState(currentState);
+		console.log(this.state);
+		console.log(currentState);
+		currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
+		console.log(currentState);
+		this.setState(currentState);
 		this.winCheck(entrantNumber);
 	};
 
 	winCheck = (entrantNumber) => {
 		const entrantShips = this.state.participants[entrantNumber].ships;
-    const falseFound = entrantShips.find((ship) => ship.some((part) => part === false));
-    console.log(this.state)
+		const falseFound = entrantShips.find((ship) => ship.some((part) => part === false));
+		console.log(this.state);
 		if (!falseFound) {
 			this.winCelebration(entrantNumber);
 		}
 	};
 
 	winCelebration = (entrantNumber) => {
-    this.setState(this.initialState);
-    if (entrantNumber === 0) {
-      this.setState({message: "You win!!! You're sick!"})
+		this.setState(JSON.parse(JSON.stringify(this.initialState)));
+		if (entrantNumber === 0) {
+			this.setState({ message: "You win!!! You're sick!" });
 		} else {
-      this.setState({message: "Computer wins!!! It's so smart!"})
+			this.setState({ message: "Computer wins!!! It's so smart!" });
 		}
 	};
 
@@ -219,7 +220,8 @@ class App extends Component {
 	};
 
 	reset = () => {
-		this.setState(this.initialState, () => console.log(this.state));
+		console.log(this.initialState);
+		this.setState(JSON.parse(JSON.stringify(this.initialState)));
 	};
 
 	render() {
@@ -257,7 +259,7 @@ class App extends Component {
 					<button onClick={this.changeOrientation}>Change ship orientation</button>
 					<button onClick={this.computerPlaceShips}>Place computer ships</button>
 					<button onClick={this.reset}>Reset</button>
-          <Announcements message={this.state.message}/>
+					<Announcements message={this.state.message} />
 				</div>
 				<div className="boards">
 					<div>
