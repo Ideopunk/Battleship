@@ -48,7 +48,7 @@ class App extends Component {
 
 	// Computer ship placement
 	computerPlaceShip = (shipNumber) => {
-		const ship = this.state.participants[1].ships[shipNumber]
+		const ship = this.state.participants[1].ships[shipNumber];
 		const length = ship.length;
 		const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
 		const multiplier = orientation === "horizontal" ? 1 : 10;
@@ -81,8 +81,7 @@ class App extends Component {
 		let currentState = this.state;
 		currentState.gamestart = true;
 		currentState.message = "The game begins!";
-		this.setState(currentState)
-
+		this.setState(currentState);
 
 		for (let i = 0; i < 5; i++) {
 			let cellArray = [];
@@ -95,7 +94,7 @@ class App extends Component {
 
 	// human ship placement
 	placeShip = (shipNumber, cellIndex, entrantNumber) => {
-		const ship = this.state.participants[0].ships[shipNumber]
+		const ship = this.state.participants[0].ships[shipNumber];
 		const shipLength = ship.length;
 		const orientation = this.state.orientation;
 		let cellArray = [];
@@ -103,11 +102,13 @@ class App extends Component {
 		try {
 			for (let i = 0; i < shipLength; i++) {
 				let newCellIndex = cellIndex + i * multiplier;
-				if (newCellIndex > 99) {
+				if (newCellIndex > 1) {
 					throw new Error("yr off the board");
-				} else if (
-					this.state.participants[entrantNumber].board[newCellIndex].status === "ship"
-				) {
+				}
+				if (i > 0 && newCellIndex % 10 === 0) {
+					throw new Error("yr off the board");
+				}
+				if (this.state.participants[entrantNumber].board[newCellIndex].status === "ship") {
 					throw new Error("yr on another ship bud");
 				}
 				cellArray.push(cellIndex + i * multiplier);
@@ -121,8 +122,6 @@ class App extends Component {
 	};
 
 	distributeShip = (cellArray, shipNumber, entrantNumber) => {
-		const boardID = `board-${entrantNumber}`;
-		const board = document.getElementById(boardID);
 		for (let [index, cell] of cellArray.entries()) {
 			this.boardStateUpdate(cell, entrantNumber, shipNumber, index);
 		}
@@ -177,9 +176,9 @@ class App extends Component {
 			const ID = `${entrantNumber}-${boardIndex}`;
 			const cell = document.getElementById(ID);
 			const shipArea = cell.getAttribute("data-ship-area");
-
+			const shipNumber = cell.getAttribute("data-ship-number");
 			// pass the actual ship number!!!!!!!!!
-			this.onShipHit(shipArea, , entrantNumber);
+			this.onShipHit(shipArea, shipNumber, entrantNumber);
 		}
 
 		this.setState(currentState);
@@ -196,19 +195,28 @@ class App extends Component {
 	};
 
 	winCheck = (entrantNumber) => {
+		let otherEntrantNumber;
+		if (entrantNumber === 0) {
+			otherEntrantNumber = 1;
+		} else {
+			otherEntrantNumber = 0;
+		}
+		console.log(otherEntrantNumber);
 		const entrantShips = this.state.participants[entrantNumber].ships;
 		const falseFound = entrantShips.find((ship) => ship.some((part) => part === false));
 		console.log(this.state);
 		if (!falseFound) {
-			this.winCelebration(entrantNumber);
+			this.winCelebration(otherEntrantNumber);
 		}
 	};
 
 	winCelebration = (entrantNumber) => {
-		this.setState(JSON.parse(JSON.stringify(this.initialState)));
+		this.reset();
 		if (entrantNumber === 0) {
+			console.log("u win");
 			this.setState({ message: "You win!!! You're sick!" });
 		} else {
+			console.log("u lose");
 			this.setState({ message: "Computer wins!!! It's so smart!" });
 		}
 	};
