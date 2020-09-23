@@ -16,7 +16,11 @@ class App extends Component {
 					[false, false, false],
 					[false, false],
 				],
-				board: new Array(100).fill({status: "naw", shipName: undefined, shipArea: undefined}),
+				board: new Array(100).fill({
+					status: "naw",
+					shipNumber: undefined,
+					shipArea: undefined,
+				}),
 			},
 			{
 				ships: [
@@ -26,7 +30,11 @@ class App extends Component {
 					[false, false, false],
 					[false, false],
 				],
-				board: new Array(100).fill({status: "naw", shipName: undefined, shipArea: undefined}),
+				board: new Array(100).fill({
+					status: "naw",
+					shipNumber: undefined,
+					shipArea: undefined,
+				}),
 			},
 		],
 		orientation: "horizontal",
@@ -39,9 +47,9 @@ class App extends Component {
 	// SHIP PLACEMENT STUFF
 
 	// Computer ship placement
-	computerPlaceShip = (shipID) => {
-		const ship = document.getElementById(shipID);
-		const length = ship.childElementCount;
+	computerPlaceShip = (shipNumber) => {
+		const ship = this.state.participants[1].ships[shipNumber]
+		const length = ship.length;
 		const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
 		const multiplier = orientation === "horizontal" ? 1 : 10;
 		const cellIndex = computer.boardpoint(length, orientation);
@@ -74,25 +82,24 @@ class App extends Component {
 		let currentState = this.state;
 		currentState.gamestart = true;
 		currentState.message = "The game begins!";
-		this.setState(currentState, () => console.log(this.state));
+		this.setState(currentState)
 
-		const names = ["Carrier", "Battleship", "Destroyer", "Submarine", "Patrol"];
-		const compNames = names.map((name) => `1-${name}`);
-		for (let compName of compNames) {
+
+		for (let i = 0; i < 5; i++) {
 			let cellArray = [];
 			while (cellArray.length < 1) {
-				cellArray = this.computerPlaceShip(compName);
+				cellArray = this.computerPlaceShip(i);
 			}
-			this.distributeShip(cellArray, compName, 1);
+			this.distributeShip(cellArray, i, 1);
 		}
 	};
 
 	// human ship placement
-	placeShip = (shipID, cellIndex, entrantNumber) => {
-		console.log(shipID, cellIndex, entrantNumber);
-		const ship = document.getElementById(shipID);
-		const shipLength = ship.childElementCount;
-		const orientation = ship.getAttribute("data-orientation");
+	placeShip = (shipNumber, cellIndex, entrantNumber) => {
+		console.log(shipNumber, cellIndex, entrantNumber);
+		const ship = this.state.participants[0].ships[shipNumber]
+		const shipLength = ship.length;
+		const orientation = this.state.orientation;
 		let cellArray = [];
 		let multiplier = orientation === "horizontal" ? 1 : 10;
 		try {
@@ -100,7 +107,9 @@ class App extends Component {
 				let newCellIndex = cellIndex + i * multiplier;
 				if (newCellIndex > 99) {
 					throw new Error("yr off the board");
-				} else if (this.state.participants[entrantNumber].board[newCellIndex].status === "ship") {
+				} else if (
+					this.state.participants[entrantNumber].board[newCellIndex].status === "ship"
+				) {
 					throw new Error("yr on another ship bud");
 				}
 				cellArray.push(cellIndex + i * multiplier);
@@ -110,27 +119,24 @@ class App extends Component {
 			return;
 		}
 
-		this.distributeShip(cellArray, shipID, entrantNumber);
+		this.distributeShip(cellArray, shipNumber, entrantNumber);
 	};
 
-	distributeShip = (cellArray, shipID, entrantNumber) => {
+	distributeShip = (cellArray, shipNumber, entrantNumber) => {
 		const boardID = `board-${entrantNumber}`;
 		const board = document.getElementById(boardID);
 		for (let [index, cell] of cellArray.entries()) {
-			this.boardStateUpdate(cell, entrantNumber, shipID, index);
-			board.childNodes[cell].setAttribute("data-ship-name", shipID);
-			board.childNodes[cell].setAttribute("data-ship-area", index);
-			console.log(document.getElementById(shipID));
+			this.boardStateUpdate(cell, entrantNumber, shipNumber, index);
 		}
 	};
 
-	boardStateUpdate = (boardArrayIndex, entrantNumber, shipID, shipArea) => {
+	boardStateUpdate = (boardArrayIndex, entrantNumber, shipNumber, shipArea) => {
 		let currentState = this.state;
-    console.log(boardArrayIndex, entrantNumber);
-    console.log(currentState)
+		console.log(boardArrayIndex, entrantNumber);
+		console.log(currentState);
 		currentState.participants[entrantNumber].board[boardArrayIndex].status = "ship";
 		currentState.participants[entrantNumber].board[boardArrayIndex].shipArea = shipArea;
-		currentState.participants[entrantNumber].board[boardArrayIndex].shipName = shipID;
+		currentState.participants[entrantNumber].board[boardArrayIndex].shipNumber = shipNumber;
 		this.setState(currentState);
 	};
 
@@ -149,8 +155,8 @@ class App extends Component {
 		this.onBoardHit(status, boardIndex, 1);
 
 		// get a good hit from the computer
-    let computerAttackIndex = computer.attack();
-    let computerStatus = this.state.participants[0].board[computerAttackIndex].status;
+		let computerAttackIndex = computer.attack();
+		let computerStatus = this.state.participants[0].board[computerAttackIndex].status;
 		while (
 			this.state.participants[0].board[computerAttackIndex].status !== "ship" &&
 			this.state.participants[0].board[computerAttackIndex].status !== "naw"
@@ -175,7 +181,9 @@ class App extends Component {
 			const ID = `${entrantNumber}-${boardIndex}`;
 			const cell = document.getElementById(ID);
 			const shipArea = cell.getAttribute("data-ship-area");
-			this.onShipHit(shipArea, boardIndex, entrantNumber);
+
+			// pass the actual ship number!!!!!!!!!
+			// this.onShipHit(shipArea, , entrantNumber);
 		}
 
 		this.setState(currentState);
@@ -184,9 +192,15 @@ class App extends Component {
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
 		console.log("onshiphit!");
+		console.log(shipArea, shipNumber, entrantNumber);
 		let currentState = this.state;
 		console.log(this.state);
 		console.log(currentState);
+		console.log(currentState.participants);
+		console.log(currentState.participants[entrantNumber]);
+		console.log(currentState.participants[entrantNumber].ships);
+		console.log(currentState.participants[entrantNumber].ships[shipNumber]);
+		console.log(currentState.participants[entrantNumber].ships[shipNumber][shipArea]);
 		currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
 		console.log(currentState);
 		this.setState(currentState);

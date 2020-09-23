@@ -5,9 +5,9 @@ class Board extends Component {
     // separate this until drop function is just giving a shipID and e.target.getAttribute(name) and passing them to the next function.
 	drop = (e) => {
         e.preventDefault();
-        const shipID = e.dataTransfer.getData("id");
+        const shipNumber = e.dataTransfer.getData("ship-number");
         console.log(this.props.entrantNumber)
-        this.props.placeShip(shipID, Number(e.target.getAttribute("name")), this.props.entrantNumber)
+        this.props.placeShip(shipNumber, Number(e.target.getAttribute("name")), this.props.entrantNumber)
 	};
 
 	dragOver = (e) => {
@@ -32,7 +32,7 @@ class Board extends Component {
 				data-value={cell.status}
 				name={index}
                 key={index}
-                data-ship-name={cell.shipName}
+                data-ship-number={cell.shipNumber}
                 data-ship-area={cell.shipArea}
 				id={`${this.props.entrantNumber}-${index}`}
 				onClick={this.hit}
