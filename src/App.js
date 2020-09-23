@@ -69,7 +69,6 @@ class App extends Component {
 	};
 
 	computerPlaceShips = () => {
-		console.log(this.state.gamestart);
 		try {
 			if (this.state.gamestart === true) {
 				throw new Error("Game already started lol");
@@ -96,7 +95,6 @@ class App extends Component {
 
 	// human ship placement
 	placeShip = (shipNumber, cellIndex, entrantNumber) => {
-		console.log(shipNumber, cellIndex, entrantNumber);
 		const ship = this.state.participants[0].ships[shipNumber]
 		const shipLength = ship.length;
 		const orientation = this.state.orientation;
@@ -132,8 +130,6 @@ class App extends Component {
 
 	boardStateUpdate = (boardArrayIndex, entrantNumber, shipNumber, shipArea) => {
 		let currentState = this.state;
-		console.log(boardArrayIndex, entrantNumber);
-		console.log(currentState);
 		currentState.participants[entrantNumber].board[boardArrayIndex].status = "ship";
 		currentState.participants[entrantNumber].board[boardArrayIndex].shipArea = shipArea;
 		currentState.participants[entrantNumber].board[boardArrayIndex].shipNumber = shipNumber;
@@ -183,7 +179,7 @@ class App extends Component {
 			const shipArea = cell.getAttribute("data-ship-area");
 
 			// pass the actual ship number!!!!!!!!!
-			// this.onShipHit(shipArea, , entrantNumber);
+			this.onShipHit(shipArea, , entrantNumber);
 		}
 
 		this.setState(currentState);
@@ -192,15 +188,7 @@ class App extends Component {
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
 		console.log("onshiphit!");
-		console.log(shipArea, shipNumber, entrantNumber);
 		let currentState = this.state;
-		console.log(this.state);
-		console.log(currentState);
-		console.log(currentState.participants);
-		console.log(currentState.participants[entrantNumber]);
-		console.log(currentState.participants[entrantNumber].ships);
-		console.log(currentState.participants[entrantNumber].ships[shipNumber]);
-		console.log(currentState.participants[entrantNumber].ships[shipNumber][shipArea]);
 		currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
 		console.log(currentState);
 		this.setState(currentState);
@@ -238,7 +226,6 @@ class App extends Component {
 	};
 
 	reset = () => {
-		console.log(this.initialState);
 		this.setState(JSON.parse(JSON.stringify(this.initialState)));
 	};
 
