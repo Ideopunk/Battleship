@@ -16,7 +16,7 @@ class App extends Component {
 					[false, false, false],
 					[false, false],
 				],
-				board: new Array(100).fill("naw"),
+				board: new Array(100).fill({status: "naw", shipName: undefined, shipArea: undefined}),
 			},
 			{
 				ships: [
@@ -26,7 +26,7 @@ class App extends Component {
 					[false, false, false],
 					[false, false],
 				],
-				board: new Array(100).fill("naw"),
+				board: new Array(100).fill({status: "naw", shipName: undefined, shipArea: undefined}),
 			},
 		],
 		orientation: "horizontal",
@@ -50,7 +50,7 @@ class App extends Component {
 
 		for (let i = 0; i < length; i++) {
 			let newCellIndex = cellIndex + i * multiplier;
-			if (this.state.participants[1].board[newCellIndex] === "ship") {
+			if (this.state.participants[1].board[newCellIndex].status === "ship") {
 				cellArray = [];
 				break;
 			}
@@ -100,7 +100,7 @@ class App extends Component {
 				let newCellIndex = cellIndex + i * multiplier;
 				if (newCellIndex > 99) {
 					throw new Error("yr off the board");
-				} else if (this.state.participants[entrantNumber].board[newCellIndex] === "ship") {
+				} else if (this.state.participants[entrantNumber].board[newCellIndex].status === "ship") {
 					throw new Error("yr on another ship bud");
 				}
 				cellArray.push(cellIndex + i * multiplier);
@@ -117,17 +117,20 @@ class App extends Component {
 		const boardID = `board-${entrantNumber}`;
 		const board = document.getElementById(boardID);
 		for (let [index, cell] of cellArray.entries()) {
-			this.boardStateUpdate(cell, entrantNumber);
+			this.boardStateUpdate(cell, entrantNumber, shipID, index);
 			board.childNodes[cell].setAttribute("data-ship-name", shipID);
 			board.childNodes[cell].setAttribute("data-ship-area", index);
 			console.log(document.getElementById(shipID));
 		}
 	};
 
-	boardStateUpdate = (boardArrayIndex, entrantNumber) => {
+	boardStateUpdate = (boardArrayIndex, entrantNumber, shipID, shipArea) => {
 		let currentState = this.state;
-		console.log(boardArrayIndex, entrantNumber);
-		currentState.participants[entrantNumber].board[boardArrayIndex] = "ship";
+    console.log(boardArrayIndex, entrantNumber);
+    console.log(currentState)
+		currentState.participants[entrantNumber].board[boardArrayIndex].status = "ship";
+		currentState.participants[entrantNumber].board[boardArrayIndex].shipArea = shipArea;
+		currentState.participants[entrantNumber].board[boardArrayIndex].shipName = shipID;
 		this.setState(currentState);
 	};
 
@@ -146,13 +149,14 @@ class App extends Component {
 		this.onBoardHit(status, boardIndex, 1);
 
 		// get a good hit from the computer
-		let computerAttackIndex, computerStatus;
+    let computerAttackIndex = computer.attack();
+    let computerStatus = this.state.participants[0].board[computerAttackIndex].status;
 		while (
-			this.state.participants[0].board[computerAttackIndex] !== "ship" &&
-			this.state.participants[0].board[computerAttackIndex] !== "naw"
+			this.state.participants[0].board[computerAttackIndex].status !== "ship" &&
+			this.state.participants[0].board[computerAttackIndex].status !== "naw"
 		) {
 			computerAttackIndex = computer.attack();
-			computerStatus = this.state.participants[0].board[computerAttackIndex];
+			computerStatus = this.state.participants[0].board[computerAttackIndex].status;
 		}
 
 		this.onBoardHit(computerStatus, computerAttackIndex, 0);
@@ -161,10 +165,10 @@ class App extends Component {
 	onBoardHit = (status, boardIndex, entrantNumber) => {
 		const currentState = this.state;
 		if (status === "naw") {
-			currentState.participants[entrantNumber].board[boardIndex] = "miss";
+			currentState.participants[entrantNumber].board[boardIndex].status = "miss";
 			currentState.message = "Attack misses!";
 		} else if (status === "ship") {
-			currentState.participants[entrantNumber].board[boardIndex] = "hit";
+			currentState.participants[entrantNumber].board[boardIndex].status = "hit";
 			currentState.message = "Attack hits!";
 
 			// extract ship area from doc

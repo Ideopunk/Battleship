@@ -15,26 +15,25 @@ class Board extends Component {
 	};
 
 	hit = (e) => {
-        try {
+        // Only works on computer board
+        if (this.props.boardHit) {
             this.props.boardHit(
                 e.target.getAttribute("data-value"),
                 e.target.getAttribute("name"), // index
             ) 
-        } catch(e){
-            console.log(e)
-            console.log('wrong board pal')
         }
-		
 	};
 
 	render() {
 		const cells = this.props.cells;
 		const cellsDisplay = cells.map((cell, index) => (
 			<div
-				className={`cell ${cell}`}
-				data-value={cell}
+				className={`cell ${cell.status}`}
+				data-value={cell.status}
 				name={index}
-				key={index}
+                key={index}
+                data-ship-name={cell.shipName}
+                data-ship-area={cell.shipArea}
 				id={`${this.props.entrantNumber}-${index}`}
 				onClick={this.hit}
 				onDrop={this.drop}
