@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Ship from "./Ship";
 import Board from "./Board";
+import Announcements from "./Announcements";
 import "./App.scss";
 import * as computer from "./computer";
 
@@ -29,45 +30,22 @@ class App extends Component {
 			},
 		],
 		orientation: "horizontal",
+    gamestart: false,
+    message: "Pre-game nerves"
 	};
 
-	state = {
-		participants: [
-			{
-				ships: [
-					[false, false, false, false, false],
-					[false, false, false, false],
-					[false, false, false],
-					[false, false, false],
-					[false, false],
-				],
-				board: new Array(100).fill("naw"),
-			},
-			{
-				ships: [
-					[false, false, false, false, false],
-					[false, false, false, false],
-					[false, false, false],
-					[false, false, false],
-					[false, false],
-				],
-				board: new Array(100).fill("naw"),
-			},
-		],
-    orientation: "horizontal",
-    gamestart: false
-	};
+	state = this.initialState;
 
 	// SHIP PLACEMENT STUFF
 
-  // Computer ship placement
+	// Computer ship placement
 	computerPlaceShip = (shipID) => {
-    const ship = document.getElementById(shipID);
+		const ship = document.getElementById(shipID);
 		const length = ship.childElementCount;
 		const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
-    const multiplier = orientation === "horizontal" ? 1 : 10;
+		const multiplier = orientation === "horizontal" ? 1 : 10;
 		const cellIndex = computer.boardpoint(length, orientation);
-    
+
 		let cellArray = [];
 
 		for (let i = 0; i < length; i++) {
@@ -83,27 +61,21 @@ class App extends Component {
 	};
 
 	computerPlaceShips = () => {
-    console.log(this.state.gamestart)
-    try {
-      if (this.state.gamestart === true) {
-        throw new Error('Game already started lol')
-      }
-    } catch(e) {
-      console.log(e)
-      return
-    }
+		console.log(this.state.gamestart);
+		try {
+			if (this.state.gamestart === true) {
+				throw new Error("Game already started lol");
+			}
+		} catch (e) {
+			console.log(e);
+			return;
+		}
 
-    let currentState = this.state
-    currentState.gamestart = true;
-    this.setState(currentState, () => console.log(this.state))
+		let currentState = this.state;
+		currentState.gamestart = true;
+		this.setState(currentState, () => console.log(this.state));
 
-		const names = [
-			"Carrier",
-			"Battleship",
-			"Destroyer",
-			"Submarine",
-			"Patrol",
-		];
+		const names = ["Carrier", "Battleship", "Destroyer", "Submarine", "Patrol"];
 		const compNames = names.map((name) => `1-${name}`);
 		for (let compName of compNames) {
 			let cellArray = [];
@@ -114,7 +86,7 @@ class App extends Component {
 		}
 	};
 
-  // human ship placement
+	// human ship placement
 	placeShip = (shipID, cellIndex, entrantNumber) => {
 		console.log(shipID, cellIndex, entrantNumber);
 		const ship = document.getElementById(shipID);
@@ -127,11 +99,7 @@ class App extends Component {
 				let newCellIndex = cellIndex + i * multiplier;
 				if (newCellIndex > 99) {
 					throw new Error("yr off the board");
-				} else if (
-					this.state.participants[entrantNumber].board[
-						newCellIndex
-					] === "ship"
-				) {
+				} else if (this.state.participants[entrantNumber].board[newCellIndex] === "ship") {
 					throw new Error("yr on another ship bud");
 				}
 				cellArray.push(cellIndex + i * multiplier);
@@ -151,14 +119,14 @@ class App extends Component {
 			this.boardStateUpdate(cell, entrantNumber);
 			board.childNodes[cell].setAttribute("data-ship-name", shipID);
 			board.childNodes[cell].setAttribute("data-ship-area", index);
+			console.log(document.getElementById(shipID));
 		}
 	};
 
 	boardStateUpdate = (boardArrayIndex, entrantNumber) => {
 		let currentState = this.state;
 		console.log(boardArrayIndex, entrantNumber);
-		currentState.participants[entrantNumber].board[boardArrayIndex] =
-			"ship";
+		currentState.participants[entrantNumber].board[boardArrayIndex] = "ship";
 		this.setState(currentState);
 	};
 
@@ -183,9 +151,7 @@ class App extends Component {
 			this.state.participants[0].board[computerAttackIndex] !== "naw"
 		) {
 			computerAttackIndex = computer.attack();
-			computerStatus = this.state.participants[0].board[
-				computerAttackIndex
-			];
+			computerStatus = this.state.participants[0].board[computerAttackIndex];
 		}
 
 		this.onBoardHit(computerStatus, computerAttackIndex, 0);
@@ -194,9 +160,11 @@ class App extends Component {
 	onBoardHit = (status, boardIndex, entrantNumber) => {
 		const currentState = this.state;
 		if (status === "naw") {
-			currentState.participants[entrantNumber].board[boardIndex] = "miss";
+      currentState.participants[entrantNumber].board[boardIndex] = "miss";
+      currentState.message = "Attack misses!"
 		} else if (status === "ship") {
-			currentState.participants[entrantNumber].board[boardIndex] = "hit";
+      currentState.participants[entrantNumber].board[boardIndex] = "hit";
+      currentState.message = "Attack hits!"
 
 			// extract ship area from doc
 			const ID = `${entrantNumber}-${boardIndex}`;
@@ -210,32 +178,32 @@ class App extends Component {
 	};
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
-		const currentState = this.state;
-		console.log(this.state);
-		currentState.participants[entrantNumber].ships[shipNumber][
-			shipArea
-		] = true;
-		this.setState(currentState);
+    console.log('onshiphit!')
+		let currentState = this.state;
+    console.log(this.state);
+    console.log(currentState)
+    currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
+    console.log(currentState)
+    this.setState(currentState);
 		this.winCheck(entrantNumber);
 	};
 
 	winCheck = (entrantNumber) => {
 		const entrantShips = this.state.participants[entrantNumber].ships;
-		const falseFound = entrantShips.find((ship) =>
-			ship.some((part) => part === false)
-		);
+    const falseFound = entrantShips.find((ship) => ship.some((part) => part === false));
+    console.log(this.state)
 		if (!falseFound) {
 			this.winCelebration(entrantNumber);
 		}
 	};
 
 	winCelebration = (entrantNumber) => {
-		if (entrantNumber === 0) {
-			alert(`You win!!!`);
+    this.setState(this.initialState);
+    if (entrantNumber === 0) {
+      this.setState({message: "You win!!! You're sick!"})
 		} else {
-			alert(`Computer wins!!`);
+      this.setState({message: "Computer wins!!! It's so smart!"})
 		}
-		this.setState(this.initialState);
 	};
 
 	changeOrientation = () => {
@@ -248,6 +216,10 @@ class App extends Component {
 		this.setState({
 			orientation: newOrientation,
 		});
+	};
+
+	reset = () => {
+		this.setState(this.initialState, () => console.log(this.state));
 	};
 
 	render() {
@@ -269,9 +241,9 @@ class App extends Component {
 				orientation={this.state.orientation}
 				hits={this.state.participants[entrantNumber].ships[shipNumber]}
 				sunk={
-					this.state.participants[entrantNumber].ships[
-						shipNumber
-					].some((part) => part === false)
+					this.state.participants[entrantNumber].ships[shipNumber].some(
+						(part) => part === false
+					)
 						? false
 						: true
 				}
@@ -282,12 +254,10 @@ class App extends Component {
 		return (
 			<div className="App">
 				<div className="commands">
-					<button onClick={this.changeOrientation}>
-						Change ship orientation
-					</button>
-          <button onClick={this.computerPlaceShips}>
-						Place computer ships
-					</button>
+					<button onClick={this.changeOrientation}>Change ship orientation</button>
+					<button onClick={this.computerPlaceShips}>Place computer ships</button>
+					<button onClick={this.reset}>Reset</button>
+          <Announcements message={this.state.message}/>
 				</div>
 				<div className="boards">
 					<div>
