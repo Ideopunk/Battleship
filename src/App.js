@@ -39,7 +39,7 @@ class App extends Component {
 		],
 		orientation: "horizontal",
 		gamestart: false,
-		message: "Pre-game nerves",
+		message: ["Pre-game nerves"],
 	};
 
 	state = JSON.parse(JSON.stringify(this.initialState));
@@ -80,7 +80,7 @@ class App extends Component {
 
 		let currentState = this.state;
 		currentState.gamestart = true;
-		currentState.message = "The game begins!";
+		currentState.message.push("The game begins!");
 		this.setState(currentState);
 
 		for (let i = 0; i < 5; i++) {
@@ -102,7 +102,7 @@ class App extends Component {
 		try {
 			for (let i = 0; i < shipLength; i++) {
 				let newCellIndex = cellIndex + i * multiplier;
-				if (newCellIndex > 1) {
+				if (newCellIndex > 99) {
 					throw new Error("yr off the board");
 				}
 				if (i > 0 && newCellIndex % 10 === 0) {
@@ -167,10 +167,10 @@ class App extends Component {
 		const currentState = this.state;
 		if (status === "naw") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "miss";
-			currentState.message = "Attack misses!";
+			currentState.message.push("Attack misses!");
 		} else if (status === "ship") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "hit";
-			currentState.message = "Attack hits!";
+			currentState.message.push("Attack hits!");
 
 			// extract ship area from doc
 			const ID = `${entrantNumber}-${boardIndex}`;
@@ -214,10 +214,10 @@ class App extends Component {
 		this.reset();
 		if (entrantNumber === 0) {
 			console.log("u win");
-			this.setState({ message: "You win!!! You're sick!" });
+			this.setState({ message: ["You win!!! You're sick!"] });
 		} else {
 			console.log("u lose");
-			this.setState({ message: "Computer wins!!! It's so smart!" });
+			this.setState({ message: ["Computer wins!!! It's so smart!"] });
 		}
 	};
 
@@ -237,6 +237,7 @@ class App extends Component {
 		this.setState(JSON.parse(JSON.stringify(this.initialState)));
 	};
 
+	
 	render() {
 		const board = (entrantNumber, boardHit) => (
 			<Board
@@ -254,6 +255,7 @@ class App extends Component {
 				shipNumber={shipNumber}
 				title={title}
 				orientation={this.state.orientation}
+				draggable={entrantNumber? false : true} // computer pieces shouldn't be draggable, should be randomly assigned via button.
 				hits={this.state.participants[entrantNumber].ships[shipNumber]}
 				sunk={
 					this.state.participants[entrantNumber].ships[shipNumber].some(
@@ -272,7 +274,7 @@ class App extends Component {
 					<button onClick={this.changeOrientation}>Change ship orientation</button>
 					<button onClick={this.computerPlaceShips}>Place computer ships</button>
 					<button onClick={this.reset}>Reset</button>
-					<Announcements message={this.state.message} />
+					
 				</div>
 				<div className="boards">
 					<div>
@@ -283,6 +285,7 @@ class App extends Component {
 						<h2>Opponent board</h2>
 						{board(1, this.playerTurnEnd)}
 					</div>
+					<Announcements message={this.state.message} />
 				</div>
 
 				<div className="pieces">

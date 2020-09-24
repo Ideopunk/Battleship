@@ -11,10 +11,10 @@ class Ship extends Component {
 	};
 
     dragStart = e => {
-        console.log(e)
-        console.log(e.currentTarget)
-        console.log(e.target)
-        console.log(e.relatedTarget)
+        // console.log(e)
+        // console.log(e.currentTarget)
+        // console.log(e.target)
+        // console.log(e.relatedTarget)
         const target = e.target;
         console.log(target)
         e.dataTransfer.setData('ship-number', e.target.getAttribute('data-value'))
@@ -48,7 +48,7 @@ class Ship extends Component {
 				} ${this.props.orientation === "vertical" ? "vertical" : ""}`}
                 data-value={this.props.shipNumber}
                 data-orientation={this.props.orientation}
-                draggable="true"
+                draggable={this.props.draggable}
                 onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
 

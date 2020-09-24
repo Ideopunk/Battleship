@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 
 class Announcements extends Component {
+    
+    
     render() {
-        return <div>{this.props.message}</div>
+        const messages = this.props.message.map((message, index) => <p key={index}>{message}</p>)
+
+        return <div className="announcements">{messages}</div>
     }
 }
 

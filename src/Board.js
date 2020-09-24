@@ -4,9 +4,18 @@ class Board extends Component {
 
     // separate this until drop function is just giving a shipID and e.target.getAttribute(name) and passing them to the next function.
 	drop = (e) => {
-        e.preventDefault();
-        const shipNumber = e.dataTransfer.getData("ship-number");
-        console.log(this.props.entrantNumber)
+		e.preventDefault();
+		const shipNumber = e.dataTransfer.getData("ship-number");
+		console.log(shipNumber)
+		try {
+			if (!shipNumber) {
+				throw new Error(`that's not a ship lol`)
+			}
+		} catch(e) {
+			console.log(e)
+			return
+		}
+		
         this.props.placeShip(shipNumber, Number(e.target.getAttribute("name")), this.props.entrantNumber)
 	};
 

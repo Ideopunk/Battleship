@@ -85,3 +85,9 @@ body {
     flex-wrap: wrap;
     flex-direction: column;
 }
+
+.announcements {
+    height: $cell-length * 12;
+    width: $cell-length * 5;
+    overflow-y: scroll;
+}
