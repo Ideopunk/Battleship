@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 
 class Ship extends Component {
-	hit = (e) => {
-        console.log('hit')
-		this.props.onShipHit(
-			e.target.getAttribute("name"), // ship area
-			e.target.parentNode.getAttribute("data-value"), // ship number
-			this.props.entrant // entrant number
-		);
-	};
+	// hit = (e) => {
+    //     console.log('hit')
+	// 	this.props.onShipHit(
+	// 		e.target.getAttribute("name"), // ship area
+	// 		e.target.parentNode.getAttribute("data-value"), // ship number
+	// 		this.props.entrant // entrant number
+	// 	);
+	// };
 
     dragStart = e => {
         // console.log(e)

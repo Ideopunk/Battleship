@@ -277,7 +277,6 @@ class App extends Component {
 			<div className="App">
 				<div className="commands">
 					<button onClick={this.changeOrientation}>Change ship orientation</button>
-					<button onClick={this.computerPlaceShips}>Place computer ships</button>
 					<button onClick={this.reset}>Reset</button>
 				</div>
 				<div className="boards">
