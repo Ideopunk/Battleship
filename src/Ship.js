@@ -24,14 +24,29 @@ class Ship extends Component {
         e.stopPropagation();
     }
 
+	checkDraggable = () => {
+		let decision;
+		if (this.props.entrant === 1) {
+			console.log('1')
+			decision = false
+		} else if (this.props.board.some(cell => cell.shipNumber === this.props.shipNumber)) {
+			console.log('some')
+			decision = false
+		} else {
+			console.log(true)
+			decision = true
+		}
+		return decision
+	}
+
 	render() {
-		const divs = this.props.hits.map((hit, index) => (
+		const divs = this.props.hits.parts.map((hit, index) => (
 			<div
 				key={index}
 				name={index}
 				data-value={hit}
                 className={hit === false ? "ship" : "hit"}
-                // draggable="true"
+                // draggable={this.checkDraggable}
                 onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
                 onClick={this.hit}
@@ -48,8 +63,8 @@ class Ship extends Component {
 				} ${this.props.orientation === "vertical" ? "vertical" : ""}`}
                 data-value={this.props.shipNumber}
                 data-orientation={this.props.orientation}
-                draggable={this.props.draggable}
-                onDragStart={this.dragStart}
+				draggable="true"
+				onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
 
 			>

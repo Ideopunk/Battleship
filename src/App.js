@@ -10,11 +10,11 @@ class App extends Component {
 		participants: [
 			{
 				ships: [
-					[false, false, false, false, false],
-					[false, false, false, false],
-					[false, false, false],
-					[false, false, false],
-					[false, false],
+					{parts: [false, false, false, false, false], onBoard: false},
+					{parts: [false, false, false, false], onBoard: false},
+					{parts: [false, false, false], onBoard: false},
+					{parts: [false, false, false], onBoard: false},
+					{parts: [false, false], onBoard: false},
 				],
 				board: new Array(100).fill({
 					status: "naw",
@@ -24,11 +24,11 @@ class App extends Component {
 			},
 			{
 				ships: [
-					[false, false, false, false, false],
-					[false, false, false, false],
-					[false, false, false],
-					[false, false, false],
-					[false, false],
+					{parts: [false, false, false, false, false], onBoard: false},
+					{parts: [false, false, false, false], onBoard: false},
+					{parts: [false, false, false], onBoard: false},
+					{parts: [false, false, false], onBoard: false},
+					{parts: [false, false], onBoard: false},
 				],
 				board: new Array(100).fill({
 					status: "naw",
@@ -49,7 +49,7 @@ class App extends Component {
 	// Computer ship placement
 	computerPlaceShip = (shipNumber) => {
 		const ship = this.state.participants[1].ships[shipNumber];
-		const length = ship.length;
+		const length = ship.parts.length;
 		const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
 		const multiplier = orientation === "horizontal" ? 1 : 10;
 		const cellIndex = computer.boardpoint(length, orientation);
@@ -95,7 +95,7 @@ class App extends Component {
 	// human ship placement
 	placeShip = (shipNumber, cellIndex, entrantNumber) => {
 		const ship = this.state.participants[0].ships[shipNumber];
-		const shipLength = ship.length;
+		const shipLength = ship.parts.length;
 		const orientation = this.state.orientation;
 		let cellArray = [];
 		let multiplier = orientation === "horizontal" ? 1 : 10;
@@ -188,7 +188,7 @@ class App extends Component {
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
 		console.log("onshiphit!");
 		let currentState = this.state;
-		currentState.participants[entrantNumber].ships[shipNumber][shipArea] = true;
+		currentState.participants[entrantNumber].ships[shipNumber].parts[shipArea] = true;
 		console.log(currentState);
 		this.setState(currentState);
 		this.winCheck(entrantNumber);
@@ -203,7 +203,7 @@ class App extends Component {
 		}
 		console.log(otherEntrantNumber);
 		const entrantShips = this.state.participants[entrantNumber].ships;
-		const falseFound = entrantShips.find((ship) => ship.some((part) => part === false));
+		const falseFound = entrantShips.find((ship) => ship.parts.some((part) => part === false));
 		console.log(this.state);
 		if (!falseFound) {
 			this.winCelebration(otherEntrantNumber);
@@ -255,10 +255,10 @@ class App extends Component {
 				shipNumber={shipNumber}
 				title={title}
 				orientation={this.state.orientation}
-				draggable={entrantNumber? false : true} // computer pieces shouldn't be draggable, should be randomly assigned via button.
+				board = {this.state.participants[entrantNumber].board}
 				hits={this.state.participants[entrantNumber].ships[shipNumber]}
 				sunk={
-					this.state.participants[entrantNumber].ships[shipNumber].some(
+					this.state.participants[entrantNumber].ships[shipNumber].parts.some(
 						(part) => part === false
 					)
 						? false
