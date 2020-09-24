@@ -129,6 +129,8 @@ class App extends Component {
 
 	boardStateUpdate = (boardArrayIndex, entrantNumber, shipNumber, shipArea) => {
 		let currentState = this.state;
+
+		currentState.participants[entrantNumber].ships[shipNumber].onBoard = true;
 		currentState.participants[entrantNumber].board[boardArrayIndex].status = "ship";
 		currentState.participants[entrantNumber].board[boardArrayIndex].shipArea = shipArea;
 		currentState.participants[entrantNumber].board[boardArrayIndex].shipNumber = shipNumber;
@@ -256,6 +258,7 @@ class App extends Component {
 				title={title}
 				orientation={this.state.orientation}
 				board = {this.state.participants[entrantNumber].board}
+				draggable = {entrantNumber ? false : !this.state.participants[entrantNumber].ships[shipNumber].onBoard}
 				hits={this.state.participants[entrantNumber].ships[shipNumber]}
 				sunk={
 					this.state.participants[entrantNumber].ships[shipNumber].parts.some(

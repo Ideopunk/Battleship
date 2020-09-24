@@ -63,7 +63,7 @@ class Ship extends Component {
 				} ${this.props.orientation === "vertical" ? "vertical" : ""}`}
                 data-value={this.props.shipNumber}
                 data-orientation={this.props.orientation}
-				draggable="true"
+				draggable={this.props.draggable}
 				onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
 
