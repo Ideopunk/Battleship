@@ -10,11 +10,11 @@ class App extends Component {
 		participants: [
 			{
 				ships: [
-					{parts: [false, false, false, false, false], onBoard: false},
-					{parts: [false, false, false, false], onBoard: false},
-					{parts: [false, false, false], onBoard: false},
-					{parts: [false, false, false], onBoard: false},
-					{parts: [false, false], onBoard: false},
+					{ parts: [false, false, false, false, false], onBoard: false },
+					{ parts: [false, false, false, false], onBoard: false },
+					{ parts: [false, false, false], onBoard: false },
+					{ parts: [false, false, false], onBoard: false },
+					{ parts: [false, false], onBoard: false },
 				],
 				board: new Array(100).fill({
 					status: "naw",
@@ -24,11 +24,11 @@ class App extends Component {
 			},
 			{
 				ships: [
-					{parts: [false, false, false, false, false], onBoard: false},
-					{parts: [false, false, false, false], onBoard: false},
-					{parts: [false, false, false], onBoard: false},
-					{parts: [false, false, false], onBoard: false},
-					{parts: [false, false], onBoard: false},
+					{ parts: [false, false, false, false, false], onBoard: false },
+					{ parts: [false, false, false, false], onBoard: false },
+					{ parts: [false, false, false], onBoard: false },
+					{ parts: [false, false, false], onBoard: false },
+					{ parts: [false, false], onBoard: false },
 				],
 				board: new Array(100).fill({
 					status: "naw",
@@ -53,6 +53,7 @@ class App extends Component {
 		const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
 		const multiplier = orientation === "horizontal" ? 1 : 10;
 		const cellIndex = computer.boardpoint(length, orientation);
+		console.log(ship, length, orientation, multiplier, cellIndex);
 
 		let cellArray = [];
 
@@ -69,20 +70,6 @@ class App extends Component {
 	};
 
 	computerPlaceShips = () => {
-		try {
-			if (this.state.gamestart === true) {
-				throw new Error("Game already started lol");
-			}
-		} catch (e) {
-			console.log(e);
-			return;
-		}
-
-		let currentState = this.state;
-		currentState.gamestart = true;
-		currentState.message.push("The game begins!");
-		this.setState(currentState);
-
 		for (let i = 0; i < 5; i++) {
 			let cellArray = [];
 			while (cellArray.length < 1) {
@@ -119,6 +106,7 @@ class App extends Component {
 		}
 
 		this.distributeShip(cellArray, shipNumber, entrantNumber);
+		this.startCheck();
 	};
 
 	distributeShip = (cellArray, shipNumber, entrantNumber) => {
@@ -138,6 +126,17 @@ class App extends Component {
 	};
 
 	// TURN STUFF
+	startCheck() {
+		console.log("start check");
+		if (!this.state.participants[0].ships.some((ship) => ship.onBoard === false)) {
+			console.log('ready to start')
+			let currentState = this.state;
+			currentState.gamestart = true;
+			currentState.message.push("The game begins!");
+			this.setState(currentState);
+			this.computerPlaceShips();
+		}
+	}
 
 	playerTurnEnd = (status, boardIndex) => {
 		try {
@@ -239,7 +238,6 @@ class App extends Component {
 		this.setState(JSON.parse(JSON.stringify(this.initialState)));
 	};
 
-	
 	render() {
 		const board = (entrantNumber, boardHit) => (
 			<Board
@@ -257,8 +255,12 @@ class App extends Component {
 				shipNumber={shipNumber}
 				title={title}
 				orientation={this.state.orientation}
-				board = {this.state.participants[entrantNumber].board}
-				draggable = {entrantNumber ? false : !this.state.participants[entrantNumber].ships[shipNumber].onBoard}
+				board={this.state.participants[entrantNumber].board}
+				draggable={
+					entrantNumber
+						? false
+						: !this.state.participants[entrantNumber].ships[shipNumber].onBoard
+				}
 				hits={this.state.participants[entrantNumber].ships[shipNumber]}
 				sunk={
 					this.state.participants[entrantNumber].ships[shipNumber].parts.some(
@@ -277,7 +279,6 @@ class App extends Component {
 					<button onClick={this.changeOrientation}>Change ship orientation</button>
 					<button onClick={this.computerPlaceShips}>Place computer ships</button>
 					<button onClick={this.reset}>Reset</button>
-					
 				</div>
 				<div className="boards">
 					<div>
