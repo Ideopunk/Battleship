@@ -1,9 +1,11 @@
-@import "reset";
-
 $cell-length: 45px;
 
+@import "reset";
+@import "ships_and_cells";
+
+
 // div {
-//     border: 1px solid black;
+//     border: 1px solid red;
 // }
 
 body {
@@ -15,7 +17,19 @@ body {
 
 button {
     height: 2rem;
-    margin: 0.5rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    width: 90%;
+    background-color: rgb(108, 176, 240);
+    border: 0px;
+    border-radius: 100px;
+    font-weight: bold;
+    outline-style: none;
+}
+
+
+.boards > * {
+    max-width: $cell-length * 10;
 }
 
 .boards {
@@ -39,93 +53,6 @@ button {
     flex-wrap: wrap;
 }
 
-.cell {
-	width: $cell-length;
-	height: $cell-length;
-	box-sizing: border-box;
-    border: 1px solid black;
-    transition: background-color 0.5s;
-}
-
-#board-1 > .cell:hover {
-    background-color: pink;
-}
-
-.miss {
- background-color: blue;
-}
-
-.miss:hover {
-    background-color: blue;
-}
-
-
-.ship {
-	width: $cell-length;
-	height: $cell-length;
-	box-sizing: border-box;
-    border: 1px solid red;
-    // background-color: red;
-}
-
-#board-0 > .ship {
-    background-color: red;
-}
-
-.ship-piece {
-    width: $cell-length;
-	height: $cell-length;
-	box-sizing: border-box;
-}
-
-.hit {
-	width: $cell-length;
-	height: $cell-length;
-	box-sizing: border-box;
-	border: 1px solid black;
-	background-color: black;
-}
-
-.hit:hover {
-    background-color: black;
-}
-
-.ship-div {
-    background-color: red;
-}
-
-.placed {
-    background-color: rgb(230, 175, 211);
-}
-
-.sunk {
-    border: 1px solid red;
-    background-color: black;
-    z-index: 10;
-}
-
-.ship-div {
-    display: flex;
-    transition: background-color 0.5s;
-}
-
-.vertical {
-    flex-direction: column;
-    width: $cell-length;
-}
-
-.pieces {
-    box-sizing: border-box;
-    height: 150px;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-}
-
-.boards > * {
-    max-width: $cell-length * 10;
-}
-
 .entrant-pieces {
     padding-top: 1rem;
     justify-content: space-between;
@@ -139,14 +66,33 @@ button {
 }
 
 .announcements {
+    padding: 0.5rem;
+    margin-top: 2.5rem;
     height: $cell-length * 10;
     width: $cell-length * 8;
-    text-align: center;
+    box-sizing: border-box;
+    opacity: 1;
+    background-color: rgb(211, 234, 255);
+    border: 2px solid rgb(153, 178, 207);
+    border-radius: 10px;
 }
 
 .announcements > * {
     font-size: 1.25rem;
     line-height: 1.5;
+}
+
+.commands {
+    margin-top: 1rem;
+    height: 200px;
+    width: $cell-length * 8;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(211, 234, 255);
+    border: 2px solid rgb(153, 178, 207);
+    border-radius: 10px;
 }
 
 .unselectable {
@@ -157,6 +103,3 @@ button {
     user-select: none; 
 }
 
-#board-1 > .ship {
-    border-color: black;
-}

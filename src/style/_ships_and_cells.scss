@@ -1,0 +1,100 @@
+$ship: grey;
+$miss: blue;
+$hit: black;
+$sunk: black;
+
+.cell {
+	width: $cell-length;
+	height: $cell-length;
+	box-sizing: border-box;
+    // border: 1px solid black;
+    transition: background-color 0.5s;
+    border-radius: 100%;
+}
+
+.cell::after {
+    position: absolute;
+    content: "";
+    border: 1px solid black;
+    box-sizing: border-box;
+    width: $cell-length;
+    height: $cell-length;
+}
+
+#board-0 > .cell:hover {
+    background-color: inherit;
+}
+
+.cell:hover {
+    background-color: pink;
+}
+
+.miss {
+ background-color: $miss;
+}
+
+.miss:hover {
+    background-color: $miss;
+}
+
+#board-0 > .miss:hover {
+    background-color: $miss;
+}
+
+.hit {
+	width: $cell-length;
+	height: $cell-length;
+	background-color: $hit;
+}
+
+.hit:hover {
+    background-color: $hit;
+}
+
+#board-0 > .hit:hover {
+    background-color: $hit;
+}
+
+#board-0 > .ship {
+    background-color: $ship;
+}
+
+#board-0 > .ship:hover {
+    background-color: $ship;
+}
+
+.ship {
+	width: $cell-length;
+	height: $cell-length;
+	box-sizing: border-box;
+}
+
+// off board
+
+.ship-piece {
+    width: $cell-length;
+	height: $cell-length;
+    box-sizing: border-box;
+    border-radius: 15px;
+}
+
+.ship-div {
+    background-color: rgb(104, 68, 68);
+    display: flex;
+    transition: background-color 0.5s;
+}
+  
+.placed {
+    background-color: rgb(230, 175, 211);
+}
+
+.sunk {
+    background-color: $sunk;
+    z-index: 3;
+}
+
+.vertical {
+    flex-direction: column;
+    width: $cell-length;
+}
+

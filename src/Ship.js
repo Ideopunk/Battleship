@@ -21,11 +21,7 @@ class Ship extends Component {
 				key={index}
 				name={index}
 				data-value={hit}
-				// className={hit === false ? "ship" : "hit"}
 				className="ship-piece"
-				onDragStart={this.dragStart}
-				onDragOver={this.dragOver}
-				onClick={this.hit}
 				id={`${this.props.entrant}-${this.props.title}-${index}`}
 			></div>
 		));
@@ -49,6 +45,8 @@ class Ship extends Component {
 					} ${this.props.orientation === "vertical" ? "vertical" : ""} ${this.props.onBoard? "placed" : ""} unselectable`}
 				>
 					{divs}
+					{/* <span className="front"></span>
+					<span className="back"></span> */}
 				</div>
 			</div>
 		);

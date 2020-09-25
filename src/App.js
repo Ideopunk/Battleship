@@ -39,7 +39,7 @@ class App extends Component {
 		],
 		orientation: "horizontal",
 		gamestart: false,
-		message: ["Pre-game nerves..."],
+		message: ["Drag or randomize to begin..."],
 		lastCompAttack: {
 			status: "miss",
 			coordinate: 0,
@@ -371,7 +371,7 @@ class App extends Component {
 						</div>
 					</div>
 					<div>
-						<h2 className="board-header">Opponent board</h2>
+						<h2 className="board-header">Opponent's board</h2>
 						{board(1, (this.state.gamestart ? this.playerTurnEnd : null))}
 						<div className="entrant-pieces">
 							{ship(1, 0)}
