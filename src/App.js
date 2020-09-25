@@ -272,14 +272,8 @@ class App extends Component {
 
 	winCelebration = (entrantNumber) => {
 		console.log(this.state.gamestart);
-		if (entrantNumber === 0) {
-			console.log("u win");
-			this.messageUpdate("You win! Ur sick!");
-		} else {
-			console.log("u lose");
-			this.messageUpdate("you lose! The computer is so smart!");
-		}
-		const end = this.reset();
+
+		const end = this.reset(entrantNumber);
 		return end;
 	};
 
@@ -295,9 +289,21 @@ class App extends Component {
 		});
 	};
 
-	reset = () => {
+	reset = (entrantNumber) => {
 		console.log(this.initialState);
-		this.setState(JSON.parse(JSON.stringify(this.initialState)));
+		let currentState = JSON.parse(JSON.stringify(this.initialState)); 
+		if (entrantNumber === 0) {
+			currentState.message = ["You win! Ur sick!"]
+		} else if (entrantNumber === 1) {
+			currentState.message = ["You lose! The computer is so smart!"]
+		}
+		this.setState(currentState)
+		// this.setState(JSON.parse(JSON.stringify(this.initialState)));
+		// if (entrantNumber === 0) {
+		// 	this.messageUpdate("You win! Ur sick!");
+		// } else if (entrantNumber === 1) {
+		// 	this.messageUpdate("you lose! The computer is so smart!");
+		// }
 		return undefined;
 	};
 
@@ -350,7 +356,7 @@ class App extends Component {
 				<div className="commands">
 					<button onClick={this.randomize}>Randomize</button>
 					<button onClick={this.changeOrientation}>Change ship orientation</button>
-					<button onClick={this.reset}>Reset</button>
+					<button onClick={() => this.reset(-1)}>Reset</button>
 				</div>
 				<div className="boards">
 					<div>
