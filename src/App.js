@@ -129,10 +129,10 @@ class App extends Component {
 	startCheck() {
 		console.log("start check");
 		if (!this.state.participants[0].ships.some((ship) => ship.onBoard === false)) {
-			console.log('ready to start')
+			console.log("ready to start");
 			let currentState = this.state;
 			currentState.gamestart = true;
-			currentState.message.push("The game begins!");
+			this.messageUpdate("The game begins!")
 			this.setState(currentState);
 			this.computerPlaceShips();
 		}
@@ -168,11 +168,10 @@ class App extends Component {
 		const currentState = this.state;
 		if (status === "naw") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "miss";
-			currentState.message.push("Attack misses!");
+			this.messageUpdate("Attack misses!")
 		} else if (status === "ship") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "hit";
-			currentState.message.push("Attack hits!");
-
+			this.messageUpdate("Attack hits!")
 			// extract ship area from doc
 			const ID = `${entrantNumber}-${boardIndex}`;
 			const cell = document.getElementById(ID);
@@ -215,10 +214,10 @@ class App extends Component {
 		this.reset();
 		if (entrantNumber === 0) {
 			console.log("u win");
-			this.setState({ message: ["You win!!! You're sick!"] });
+			this.messageUpdate("You win! Ur sick!")
 		} else {
 			console.log("u lose");
-			this.setState({ message: ["Computer wins!!! It's so smart!"] });
+			this.messageUpdate("you lose! The computer is so smart!")
 		}
 	};
 
@@ -236,6 +235,15 @@ class App extends Component {
 
 	reset = () => {
 		this.setState(JSON.parse(JSON.stringify(this.initialState)));
+	};
+
+	messageUpdate = (newMessage) => {
+		const currentState = this.state;
+		currentState.message.push(newMessage);
+		if (currentState.message.length > 20) {
+			currentState.message.shift();
+		}
+		this.setState(currentState);
 	};
 
 	render() {
