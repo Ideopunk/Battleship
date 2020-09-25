@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import * as viewport from "./viewport";
 class Ship extends Component {
-	// hit = (e) => {
-    //     console.log('hit')
-	// 	this.props.onShipHit(
-	// 		e.target.getAttribute("name"), // ship area
-	// 		e.target.parentNode.getAttribute("data-value"), // ship number
-	// 		this.props.entrant // entrant number
-	// 	);
-	// };
-
     dragStart = e => {
 		const percentArea = viewport.test(e.target.getBoundingClientRect(), e.clientY, e.clientX)
 		const shipArea = Math.floor(percentArea * this.props.hits.parts.length)
@@ -23,21 +14,6 @@ class Ship extends Component {
     dragOver = e => {
         e.stopPropagation();
     }
-
-	checkDraggable = () => {
-		let decision;
-		if (this.props.entrant === 1) {
-			console.log('1')
-			decision = false
-		} else if (this.props.board.some(cell => cell.shipNumber === this.props.shipNumber)) {
-			console.log('some')
-			decision = false
-		} else {
-			console.log(true)
-			decision = true
-		}
-		return decision
-	}
 
 	render() {
 		const divs = this.props.hits.parts.map((hit, index) => (

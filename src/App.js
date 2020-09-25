@@ -93,15 +93,22 @@ class App extends Component {
 	};
 
 	// human ship placement
-	placeShip = (shipNumber, cellIndex, entrantNumber) => {
-		const ship = this.state.participants[0].ships[shipNumber];
+	placeShip = (shipNumber, cellIndex, entrantNumber, shipArea) => {
+		let cellArray = [];
+		let transitionCellIndex;
+
+		const ship = this.state.participants[entrantNumber].ships[shipNumber];
 		const shipLength = ship.parts.length;
 		const orientation = this.state.orientation;
-		let cellArray = [];
+
 		let multiplier = orientation === "horizontal" ? 1 : 10;
+		// move the ship depending on which part of the ship the player is dragging. 
+		transitionCellIndex = cellIndex - shipArea * multiplier
+		console.log(cellIndex, transitionCellIndex)
+		
 		try {
 			for (let i = 0; i < shipLength; i++) {
-				let newCellIndex = cellIndex + i * multiplier;
+				let newCellIndex = transitionCellIndex + i * multiplier;
 				if (newCellIndex > 99) {
 					throw new Error("yr off the board");
 				}
@@ -111,7 +118,7 @@ class App extends Component {
 				if (this.state.participants[entrantNumber].board[newCellIndex].status === "ship") {
 					throw new Error("yr on another ship bud");
 				}
-				cellArray.push(cellIndex + i * multiplier);
+				cellArray.push(transitionCellIndex + i * multiplier);
 			}
 		} catch (e) {
 			console.log(e);

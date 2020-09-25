@@ -8,11 +8,3 @@ const test = (rect, mouseY, mouseX) => {
 
 export { test };
 
-// bottom: 106
-// height: 45
-// left: 130.40000915527344
-// right: 310.40000915527344
-// top: 61
-// width: 180
-// x: 130.40000915527344
-// y: 61
