@@ -7,7 +7,6 @@ $sunk: black;
 	width: $cell-length;
 	height: $cell-length;
 	box-sizing: border-box;
-    // border: 1px solid black;
     transition: background-color 0.5s;
     border-radius: 100%;
 }
@@ -76,19 +75,26 @@ $sunk: black;
 	height: $cell-length;
     box-sizing: border-box;
     border-radius: 15px;
+    transition: background-color 0.5s;
+    border-radius: 100%;
+    background-color: $ship;
+}
+
+.ship-piece::after {
+
 }
 
 .ship-div {
-    background-color: rgb(104, 68, 68);
+    // background-color: $ship;
     display: flex;
     transition: background-color 0.5s;
 }
   
-.placed {
-    background-color: rgb(230, 175, 211);
+.placed > * {
+    background-color: lighten($ship, 20%);
 }
 
-.sunk {
+.sunk > * {
     background-color: $sunk;
     z-index: 3;
 }

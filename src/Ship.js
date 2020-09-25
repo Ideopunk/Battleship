@@ -38,7 +38,7 @@ class Ship extends Component {
 				unselectable="on"
 				user-select="none"
 			>
-				<h3>{this.props.title}</h3>
+				<h3 className="piece-heading">{this.props.orientation === "horizontal" && this.props.title}</h3>
 				<div
 					className={`ship-div ${this.props.title} ${
 						this.props.sunk === true ? "sunk" : ""
