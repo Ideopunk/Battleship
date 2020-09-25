@@ -87,8 +87,7 @@ body {
 }
 
 .announcements {
-    height: $cell-length * 12;
+    height: $cell-length * 10;
     width: $cell-length * 5;
-    overflow-y: scroll;
 }
 
