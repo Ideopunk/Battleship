@@ -46,6 +46,11 @@ body {
     background-color: red;
 }
 
+.ship-piece {
+    width: $cell-length;
+	height: $cell-length;
+	box-sizing: border-box;
+}
 
 .hit {
 	width: $cell-length;
@@ -55,8 +60,22 @@ body {
 	background-color: black;
 }
 
+.hit-piece {
+
+}
+
+.ship-div {
+    background-color: red;
+}
+
+.placed {
+    background-color: coral;
+}
+
 .sunk {
-	border: 1px solid red;
+    border: 1px solid red;
+    background-color: black;
+    z-index: 10;
 }
 
 .ship-div {
@@ -97,4 +116,9 @@ body {
     -webkit-user-select: none;
      -ms-user-select: none;
     user-select: none; 
+}
+
+#board-1 > .ship {
+    background-color: white;
+    border-color: black;
 }

@@ -10,11 +10,11 @@ class App extends Component {
 		participants: [
 			{
 				ships: [
-					{ parts: [false, false, false, false, false], onBoard: false },
-					{ parts: [false, false, false, false], onBoard: false },
-					{ parts: [false, false, false], onBoard: false },
-					{ parts: [false, false, false], onBoard: false },
-					{ parts: [false, false], onBoard: false },
+					{ parts: [false, false, false, false, false], onBoard: false, name: "Carrier"},
+					{ parts: [false, false, false, false], onBoard: false, name: "Battleship" },
+					{ parts: [false, false, false], onBoard: false, name: "Destroyer"},
+					{ parts: [false, false, false], onBoard: false, name: "Submarine" },
+					{ parts: [false, false], onBoard: false, name: "Patrol" },
 				],
 				board: new Array(100).fill({
 					status: "naw",
@@ -24,11 +24,11 @@ class App extends Component {
 			},
 			{
 				ships: [
-					{ parts: [false, false, false, false, false], onBoard: false },
-					{ parts: [false, false, false, false], onBoard: false },
-					{ parts: [false, false, false], onBoard: false },
-					{ parts: [false, false, false], onBoard: false },
-					{ parts: [false, false], onBoard: false },
+					{ parts: [false, false, false, false, false], onBoard: false, name: "Carrier" },
+					{ parts: [false, false, false, false], onBoard: false, name: "Battleship" },
+					{ parts: [false, false, false], onBoard: false, name: "Destroyer"},
+					{ parts: [false, false, false], onBoard: false, name: "Submarine" },
+					{ parts: [false, false], onBoard: false, name: "Patrol" },
 				],
 				board: new Array(100).fill({
 					status: "naw",
@@ -233,6 +233,7 @@ class App extends Component {
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
 		console.log("onshiphit!");
 		let currentState = this.state;
+
 		currentState.participants[entrantNumber].ships[shipNumber].parts[shipArea] = true;
 		if (
 			!currentState.participants[entrantNumber].ships[shipNumber].parts.some(
@@ -240,9 +241,9 @@ class App extends Component {
 			)
 		) {
 			if (!entrantNumber) {
-				this.messageUpdate("Your ship has sunk!");
+				this.messageUpdate(`Your ${currentState.participants[entrantNumber].ships[shipNumber].name.toLowerCase()} has sunk!`);
 			} else {
-				this.messageUpdate("The computer's ship has sunk!");
+				this.messageUpdate(`The computer's ${currentState.participants[entrantNumber].ships[shipNumber].name.toLowerCase()} has sunk!`);
 			}
 		}
 		console.log(currentState);
@@ -327,13 +328,14 @@ class App extends Component {
 			/>
 		);
 
-		const ship = (entrantNumber, shipNumber, title) => (
+		const ship = (entrantNumber, shipNumber) => (
 			<Ship
 				entrant={entrantNumber}
 				shipNumber={shipNumber}
-				title={title}
+				title={this.state.participants[entrantNumber].ships[shipNumber].name}
 				orientation={this.state.orientation}
 				board={this.state.participants[entrantNumber].board}
+				onBoard={this.state.participants[entrantNumber].ships[shipNumber].onBoard}
 				draggable={
 					entrantNumber
 						? false
@@ -372,18 +374,18 @@ class App extends Component {
 
 				<div className="pieces">
 					<div className="entrant-pieces">
-						{ship(0, 0, "Carrier")}
-						{ship(0, 1, "Battleship")}
-						{ship(0, 2, "Destroyer")}
-						{ship(0, 3, "Submarine")}
-						{ship(0, 4, "Patrol")}
+						{ship(0, 0)}
+						{ship(0, 1)}
+						{ship(0, 2)}
+						{ship(0, 3)}
+						{ship(0, 4)}
 					</div>
 					<div className="entrant-pieces">
-						{ship(1, 0, "Carrier")}
-						{ship(1, 1, "Battleship")}
-						{ship(1, 2, "Destroyer")}
-						{ship(1, 3, "Submarine")}
-						{ship(1, 4, "Patrol")}
+						{ship(1, 0)}
+						{ship(1, 1)}
+						{ship(1, 2)}
+						{ship(1, 3)}
+						{ship(1, 4)}
 					</div>
 				</div>
 			</div>
