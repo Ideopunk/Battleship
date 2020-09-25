@@ -4,17 +4,25 @@ const attack = (lastCompAttack) => {
 		return Math.floor(Math.random() * 100);
 	} else {
 		const temp = Math.floor(Math.random() * 45);
+		let returnValue;
 		if (temp < 10) {
-			return coordinate - 1;
+			returnValue = coordinate - 1;
 		} else if (temp < 20) {
-			return coordinate + 1;
+			returnValue = coordinate + 1;
 		} else if (temp < 30) {
-			return coordinate - 10;
+			returnValue = coordinate - 10;
 		} else if (temp < 40) {
-			return coordinate + 10;
+			returnValue = coordinate + 10;
 		} else {
-			return Math.floor(Math.random() * 100);
+			returnValue = Math.floor(Math.random() * 100);
 		}
+
+		// Don't go off the board.
+		if (returnValue < 0 || 99 < returnValue) {
+			returnValue = Math.floor(Math.random() * 100);
+		}
+
+		return returnValue;
 	}
 };
 
