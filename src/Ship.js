@@ -38,15 +38,17 @@ class Ship extends Component {
 				unselectable="on"
 				user-select="none"
 			>
-				<h3 className="piece-heading">{this.props.orientation === "horizontal" && this.props.title}</h3>
+				<h3 className="piece-heading">
+					{this.props.orientation === "horizontal" && this.props.title}
+				</h3>
 				<div
 					className={`ship-div ${this.props.title} ${
 						this.props.sunk === true ? "sunk" : ""
-					} ${this.props.orientation === "vertical" ? "vertical" : ""} ${this.props.onBoard? "placed" : ""} unselectable`}
+					} ${this.props.orientation === "vertical" ? "vertical" : ""} ${
+						this.props.onBoard ? "placed" : ""
+					} unselectable`}
 				>
 					{divs}
-					{/* <span className="front"></span>
-					<span className="back"></span> */}
 				</div>
 			</div>
 		);
