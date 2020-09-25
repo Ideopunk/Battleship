@@ -6,7 +6,7 @@ class Announcements extends Component {
 		const messages = this.props.message.map((message, index) => <p key={index}>{message}</p>);
 
 		return (
-			<div className="announcements">
+			<div id="announcements" className="announcements">
 				{messages}
 			</div>
 		);

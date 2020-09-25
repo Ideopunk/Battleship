@@ -354,11 +354,11 @@ class App extends Component {
 				</div>
 				<div className="boards">
 					<div>
-						<h2>Set up your board</h2>
+						<h2 className="board-header">Set up your board</h2>
 						{board(0, null)}
 					</div>
 					<div>
-						<h2>Opponent board</h2>
+						<h2 className="board-header">Opponent board</h2>
 						{board(1, (this.state.gamestart ? this.playerTurnEnd : null))}
 					</div>
 					<Announcements message={this.state.message} />

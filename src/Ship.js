@@ -35,13 +35,14 @@ class Ship extends Component {
 				name={this.props.title}
 				className={`ship-div ${this.props.title} ${
 					this.props.sunk === true ? "sunk" : ""
-				} ${this.props.orientation === "vertical" ? "vertical" : ""}`}
+				} ${this.props.orientation === "vertical" ? "vertical" : ""} unselectable`}
                 data-value={this.props.shipNumber}
                 data-orientation={this.props.orientation}
 				draggable={this.props.draggable}
 				onDragStart={this.dragStart}
-                onDragOver={this.dragOver}
-
+				onDragOver={this.dragOver}
+				unselectable="on"
+				user-select="none"
 			>
 				{divs}
 			</div>
