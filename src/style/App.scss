@@ -35,9 +35,15 @@ button {
 .boards {
     width: 100%;
     justify-content: space-around;
-    padding: 2rem;
+    padding: 1rem;
     box-sizing: border-box;
     display: flex;
+}
+
+@media (max-width: 979px) {
+    .boards {
+        padding: 0.25rem;
+    }
 }
 
 .board-header {
@@ -69,6 +75,7 @@ button {
     text-align: center;
 }
 
+
 .announcements {
     padding: 0.5rem;
     margin-top: 2.5rem;
@@ -81,9 +88,23 @@ button {
     border-radius: 10px;
 }
 
+@media (max-width: 979px) {
+    .announcements {
+        padding: 0.25rem;
+        width: $cell-length * 6;
+    }
+}
+
 .announcements > * {
     font-size: 1.25rem;
     line-height: 1.5;
+}
+
+@media (max-width: 979px) {
+    .announcements > * {
+        font-size: 1rem;
+        line-height: 1.25;
+    }
 }
 
 .commands {
