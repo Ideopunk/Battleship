@@ -39,7 +39,7 @@ class App extends Component {
 		],
 		orientation: "horizontal",
 		gamestart: false,
-		message: ["Pre-game nerves"],
+		message: ["Pre-game nerves..."],
 		lastCompAttack: {
 			status: "miss",
 			coordinate: 0,
@@ -81,11 +81,13 @@ class App extends Component {
 
 	placeRandomShips = (entrantNumber) => {
 		for (let i = 0; i < 5; i++) {
-			let cellArray = [];
-			while (cellArray.length < 1) {
-				cellArray = this.placeRandomShip(i, entrantNumber);
+			if (!this.state.participants[entrantNumber].ships[i].onBoard) {
+				let cellArray = [];
+				while (cellArray.length < 1) {
+					cellArray = this.placeRandomShip(i, entrantNumber);
+				}
+				this.distributeShip(cellArray, i, entrantNumber);
 			}
-			this.distributeShip(cellArray, i, entrantNumber);
 		}
 	};
 
@@ -294,7 +296,7 @@ class App extends Component {
 		console.log(this.initialState);
 		let currentState = JSON.parse(JSON.stringify(this.initialState)); 
 		if (entrantNumber === 0) {
-			currentState.message = ["You win! Ur sick!"]
+			currentState.message = ["You win! You're a hero!"]
 		} else if (entrantNumber === 1) {
 			currentState.message = ["You lose! The computer is so smart!"]
 		}
@@ -311,7 +313,7 @@ class App extends Component {
 	messageUpdate = (newMessage) => {
 		const currentState = this.state;
 		currentState.message.push(newMessage);
-		if (currentState.message.length > 20) {
+		if (currentState.message.length > 12) {
 			currentState.message.shift();
 		}
 		this.setState(currentState);
@@ -355,37 +357,37 @@ class App extends Component {
 
 		return (
 			<div className="App">
-				<div className="commands">
-					<button onClick={this.randomize}>Randomize</button>
-					<button onClick={this.changeOrientation}>Change ship orientation</button>
-					<button onClick={() => this.reset(-1)}>Reset</button>
-				</div>
+
 				<div className="boards">
 					<div>
-						<h2 className="board-header">Set up your board</h2>
+						<h2 className="board-header">{this.state.gamestart? "Your board" : "Set up your board"}</h2>
 						{board(0, null)}
+						<div className="entrant-pieces">
+							{ship(0, 0)}
+							{ship(0, 1)}
+							{ship(0, 2)}
+							{ship(0, 3)}
+							{ship(0, 4)}
+						</div>
 					</div>
 					<div>
 						<h2 className="board-header">Opponent board</h2>
 						{board(1, (this.state.gamestart ? this.playerTurnEnd : null))}
+						<div className="entrant-pieces">
+							{ship(1, 0)}
+							{ship(1, 1)}
+							{ship(1, 2)}
+							{ship(1, 3)}
+							{ship(1, 4)}
+						</div>
 					</div>
-					<Announcements message={this.state.message} />
-				</div>
-
-				<div className="pieces">
-					<div className="entrant-pieces">
-						{ship(0, 0)}
-						{ship(0, 1)}
-						{ship(0, 2)}
-						{ship(0, 3)}
-						{ship(0, 4)}
-					</div>
-					<div className="entrant-pieces">
-						{ship(1, 0)}
-						{ship(1, 1)}
-						{ship(1, 2)}
-						{ship(1, 3)}
-						{ship(1, 4)}
+					<div>
+						<Announcements message={this.state.message} />
+						<div className="commands">
+							<button onClick={this.randomize}>Randomize</button>
+							<button onClick={this.changeOrientation}>Change ship orientation</button>
+							<button onClick={() => this.reset(-1)}>Reset</button>
+						</div>
 					</div>
 				</div>
 			</div>

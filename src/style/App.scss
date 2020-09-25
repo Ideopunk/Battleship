@@ -2,15 +2,21 @@
 
 $cell-length: 45px;
 
+// div {
+//     border: 1px solid black;
+// }
+
 body {
+    font-family: Arial, Helvetica, Ubuntu, sans-serif;
     height: 100vh;
     width: 100%;
+    background-color: rgb(223, 238, 252);
 }
 
-// #root {
-//     height: 100%;
-//     width: 100%;
-// }
+button {
+    height: 2rem;
+    margin: 0.5rem;
+}
 
 .boards {
     width: 100%;
@@ -18,6 +24,12 @@ body {
     padding: 2rem;
     box-sizing: border-box;
     display: flex;
+}
+
+.board-header {
+    font-size: 2rem;
+    text-align: center;
+    margin: 0.25rem;
 }
 
 .board {
@@ -31,18 +43,32 @@ body {
 	width: $cell-length;
 	height: $cell-length;
 	box-sizing: border-box;
-	border: 1px solid black;
+    border: 1px solid black;
+    transition: background-color 0.5s;
+}
+
+#board-1 > .cell:hover {
+    background-color: pink;
 }
 
 .miss {
  background-color: blue;
 }
 
+.miss:hover {
+    background-color: blue;
+}
+
+
 .ship {
 	width: $cell-length;
 	height: $cell-length;
 	box-sizing: border-box;
     border: 1px solid red;
+    // background-color: red;
+}
+
+#board-0 > .ship {
     background-color: red;
 }
 
@@ -60,8 +86,8 @@ body {
 	background-color: black;
 }
 
-.hit-piece {
-
+.hit:hover {
+    background-color: black;
 }
 
 .ship-div {
@@ -69,7 +95,7 @@ body {
 }
 
 .placed {
-    background-color: coral;
+    background-color: rgb(230, 175, 211);
 }
 
 .sunk {
@@ -79,11 +105,13 @@ body {
 }
 
 .ship-div {
-	display: flex;
+    display: flex;
+    transition: background-color 0.5s;
 }
 
 .vertical {
     flex-direction: column;
+    width: $cell-length;
 }
 
 .pieces {
@@ -94,20 +122,31 @@ body {
     width: 100%;
 }
 
+.boards > * {
+    max-width: $cell-length * 10;
+}
+
 .entrant-pieces {
+    padding-top: 1rem;
+    justify-content: space-between;
     box-sizing: border-box;
-    max-width: 500px;
+    width: 100%;
     flex: 1;
+    height: $cell-length * 5;
     display: flex;
-    gap: 1rem;
     align-items: flex-start;
     flex-wrap: wrap;
-    flex-direction: column;
 }
 
 .announcements {
     height: $cell-length * 10;
-    width: $cell-length * 5;
+    width: $cell-length * 8;
+    text-align: center;
+}
+
+.announcements > * {
+    font-size: 1.25rem;
+    line-height: 1.5;
 }
 
 .unselectable {
@@ -119,6 +158,5 @@ body {
 }
 
 #board-1 > .ship {
-    background-color: white;
     border-color: black;
 }
