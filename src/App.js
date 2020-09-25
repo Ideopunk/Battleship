@@ -163,8 +163,17 @@ class App extends Component {
 
 		this.onBoardHit(status, boardIndex, 1);
 
+		try {
+			if (!this.state.gamestart) {
+				throw new Error('geez')
+			}
+		} catch(e) {
+			console.log(e)
+			return;
+		}
+
+		console.log(this.state.gamestart)
 		// get a good hit from the computer
-		console.log(this.state.lastCompAttack);
 		let computerAttackIndex = computer.attack(this.state.lastCompAttack);
 		let computerStatus = this.state.participants[0].board[computerAttackIndex].status;
 		while (
@@ -203,11 +212,12 @@ class App extends Component {
 			const cell = document.getElementById(ID);
 			const shipArea = cell.getAttribute("data-ship-area");
 			const shipNumber = cell.getAttribute("data-ship-number");
+			this.setState(currentState);
 			this.onShipHit(shipArea, shipNumber, entrantNumber);
 		}
 
-		this.setState(currentState);
-		return;
+		// this.setState(currentState);
+		// return;
 	};
 
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
@@ -248,6 +258,7 @@ class App extends Component {
 
 	winCelebration = (entrantNumber) => {
 		this.reset();
+		console.log(this.state.gamestart)
 		if (entrantNumber === 0) {
 			console.log("u win");
 			this.messageUpdate("You win! Ur sick!");
@@ -270,7 +281,8 @@ class App extends Component {
 	};
 
 	reset = () => {
-		this.setState(JSON.parse(JSON.stringify(this.initialState)));
+		console.log(this.initialState)
+		this.setState(JSON.parse(JSON.stringify(this.initialState)), () => {console.log(this.state)});
 	};
 
 	messageUpdate = (newMessage) => {

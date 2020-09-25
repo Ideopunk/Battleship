@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import * as viewport from "./viewport";
 class Ship extends Component {
 	// hit = (e) => {
     //     console.log('hit')
@@ -11,13 +11,13 @@ class Ship extends Component {
 	// };
 
     dragStart = e => {
-        // console.log(e)
-        // console.log(e.currentTarget)
-        // console.log(e.target)
-        // console.log(e.relatedTarget)
-        const target = e.target;
-        console.log(target)
-        e.dataTransfer.setData('ship-number', e.target.getAttribute('data-value'))
+		const percentArea = viewport.test(e.target.getBoundingClientRect(), e.clientY, e.clientX)
+		const shipArea = Math.floor(percentArea * this.props.hits.parts.length)
+		const shipObject = {
+			shipNumber: e.target.getAttribute('data-value'),
+			shipArea,
+		}
+        e.dataTransfer.setData('ship-data', JSON.stringify(shipObject))
     }
 
     dragOver = e => {
@@ -46,7 +46,6 @@ class Ship extends Component {
 				name={index}
 				data-value={hit}
                 className={hit === false ? "ship" : "hit"}
-                // draggable={this.checkDraggable}
                 onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
                 onClick={this.hit}

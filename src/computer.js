@@ -1,11 +1,10 @@
 const attack = (lastCompAttack) => {
-	console.log(lastCompAttack);
 	const { status, coordinate } = lastCompAttack;
 	if (status === "miss") {
 		return Math.floor(Math.random() * 100);
 	} else {
 		const temp = Math.floor(Math.random() * 45);
-		if (temp < 10 ) {
+		if (temp < 10) {
 			return coordinate - 1;
 		} else if (temp < 20) {
 			return coordinate + 1;

@@ -4,7 +4,7 @@ class Board extends Component {
 	// separate this until drop function is just giving a shipID and e.target.getAttribute(name) and passing them to the next function.
 	drop = (e) => {
 		e.preventDefault();
-		const shipNumber = e.dataTransfer.getData("ship-number");
+		const {shipNumber, shipArea} = e.dataTransfer.getData("ship-number");
 		console.log(shipNumber);
 		try {
 			if (!shipNumber) {
