@@ -30,20 +30,15 @@ button {
 
 .boards > * {
     max-width: $cell-length * 10;
+    margin: 0 1rem;
 }
 
 .boards {
     width: 100%;
     justify-content: space-around;
-    padding: 1rem;
+    padding-top: 1rem;
     box-sizing: border-box;
     display: flex;
-}
-
-@media (max-width: 979px) {
-    .boards {
-        padding: 0.25rem;
-    }
 }
 
 .board-header {
@@ -75,24 +70,20 @@ button {
     text-align: center;
 }
 
+.parent-announcements {
+    flex: 1 1 200px;
+    margin: 1rem;
+}
 
 .announcements {
     padding: 0.5rem;
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
     height: $cell-length * 10;
-    width: $cell-length * 8;
     box-sizing: border-box;
     opacity: 1;
     background-color: rgb(211, 234, 255);
     border: 2px solid rgb(153, 178, 207);
     border-radius: 10px;
-}
-
-@media (max-width: 979px) {
-    .announcements {
-        padding: 0.25rem;
-        width: $cell-length * 6;
-    }
 }
 
 .announcements > * {
@@ -110,7 +101,6 @@ button {
 .commands {
     margin-top: 1rem;
     height: 200px;
-    width: $cell-length * 8;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

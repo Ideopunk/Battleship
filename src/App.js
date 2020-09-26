@@ -381,7 +381,7 @@ class App extends Component {
 							{ship(1, 4)}
 						</div>
 					</div>
-					<div>
+					<div className="parent-announcements">
 						<Announcements message={this.state.message} />
 						<div className="commands">
 							<button onClick={this.randomize}>Randomize</button>
