@@ -10,9 +10,9 @@ class App extends Component {
 		participants: [
 			{
 				ships: [
-					{ parts: [false, false, false, false, false], onBoard: false, name: "Carrier"},
+					{ parts: [false, false, false, false, false], onBoard: false, name: "Carrier" },
 					{ parts: [false, false, false, false], onBoard: false, name: "Battleship" },
-					{ parts: [false, false, false], onBoard: false, name: "Destroyer"},
+					{ parts: [false, false, false], onBoard: false, name: "Destroyer" },
 					{ parts: [false, false, false], onBoard: false, name: "Submarine" },
 					{ parts: [false, false], onBoard: false, name: "Patrol" },
 				],
@@ -26,7 +26,7 @@ class App extends Component {
 				ships: [
 					{ parts: [false, false, false, false, false], onBoard: false, name: "Carrier" },
 					{ parts: [false, false, false, false], onBoard: false, name: "Battleship" },
-					{ parts: [false, false, false], onBoard: false, name: "Destroyer"},
+					{ parts: [false, false, false], onBoard: false, name: "Destroyer" },
 					{ parts: [false, false, false], onBoard: false, name: "Submarine" },
 					{ parts: [false, false], onBoard: false, name: "Patrol" },
 				],
@@ -96,11 +96,13 @@ class App extends Component {
 		let cellArray = [];
 		let transitionCellIndex;
 
+		// which ship is being placed? How long is it, and how are we currently oriented? 
 		const ship = this.state.participants[entrantNumber].ships[shipNumber];
 		const shipLength = ship.parts.length;
 		const orientation = this.state.orientation;
 
 		let multiplier = orientation === "horizontal" ? 1 : 10;
+
 		// move the ship depending on which part of the ship the player is dragging.
 		transitionCellIndex = cellIndex - shipArea * multiplier;
 
@@ -144,6 +146,8 @@ class App extends Component {
 	};
 
 	// TURN STUFF
+
+	// have all of the pieces been placed? If so, the game can begin
 	startCheck() {
 		if (!this.state.participants[0].ships.some((ship) => ship.onBoard === false)) {
 			let currentState = this.state;
@@ -154,7 +158,10 @@ class App extends Component {
 		}
 	}
 
-	playerTurnEnd = (status, boardIndex) => {
+	// When the player clicks a cell on the opponent's board ( / makes an attack), the turn ends -- IF it was a clickable location. 
+	// The onBoardHit sequence is ran, and then again for a random location attacked by the computer.
+	playerTurnEnd = (boardIndex) => {
+		let status = this.state.participants[1].board[boardIndex].status;
 		try {
 			if (status !== "naw" && status !== "ship") {
 				throw new Error(`you can't click there`);
@@ -164,7 +171,8 @@ class App extends Component {
 			return;
 		}
 
-		let end = this.onBoardHit(status, boardIndex, 1);
+		// if the win checks say it's over and has reset the board, then stop executing the code!
+		let end = this.onBoardHit(boardIndex, 1);
 		try {
 			if (!end) {
 				throw new Error("It's over!");
@@ -174,23 +182,17 @@ class App extends Component {
 			return;
 		}
 
-		console.log(this.state.gamestart);
-
-		console.log(this.state.gamestart);
 		// get a good hit from the computer
 		let computerAttackIndex = computer.attack(this.state.lastCompAttack);
-		console.log(computerAttackIndex);
-		let computerStatus = this.state.participants[0].board[computerAttackIndex].status;
 		while (
 			this.state.participants[0].board[computerAttackIndex].status !== "ship" &&
 			this.state.participants[0].board[computerAttackIndex].status !== "naw"
 		) {
 			computerAttackIndex = computer.attack(this.state.lastCompAttack);
-			console.log(computerAttackIndex);
-			computerStatus = this.state.participants[0].board[computerAttackIndex].status;
 		}
 
-		end = this.onBoardHit(computerStatus, computerAttackIndex, 0);
+		// if the win checks say it's over and has reset the board, then stop executing the code!
+		end = this.onBoardHit(computerAttackIndex, 0);
 		try {
 			if (!end) {
 				throw new Error("It's over!");
@@ -201,8 +203,11 @@ class App extends Component {
 		}
 	};
 
-	onBoardHit = (status, boardIndex, entrantNumber) => {
+	onBoardHit = (boardIndex, entrantNumber) => {
 		const currentState = this.state;
+		let status = currentState.participants[entrantNumber].board[boardIndex].status
+
+		// if attack misses
 		if (status === "naw") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "miss";
 			if (entrantNumber) {
@@ -212,6 +217,8 @@ class App extends Component {
 				this.messageUpdate("The computer's attack misses!");
 			}
 			return true;
+
+		// if attack hits
 		} else if (status === "ship") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "hit";
 			if (entrantNumber) {
@@ -221,19 +228,16 @@ class App extends Component {
 				this.messageUpdate("The computer's attack hits!");
 			}
 
-			// extract ship area from doc
-			const ID = `${entrantNumber}-${boardIndex}`;
-			const cell = document.getElementById(ID);
-			const shipArea = cell.getAttribute("data-ship-area");
-			const shipNumber = cell.getAttribute("data-ship-number");
+			const {shipArea, shipNumber} = currentState.participants[entrantNumber].board[boardIndex]
+			
 			this.setState(currentState);
 			const end = this.onShipHit(shipArea, shipNumber, entrantNumber);
 			return end;
 		}
 	};
 
+	// based on ship being hit in UI / components, update ship in state.
 	onShipHit = (shipArea, shipNumber, entrantNumber) => {
-		console.log("onshiphit!");
 		let currentState = this.state;
 
 		currentState.participants[entrantNumber].ships[shipNumber].parts[shipArea] = true;
@@ -243,17 +247,25 @@ class App extends Component {
 			)
 		) {
 			if (!entrantNumber) {
-				this.messageUpdate(`Your ${currentState.participants[entrantNumber].ships[shipNumber].name.toLowerCase()} has sunk!`);
+				this.messageUpdate(
+					`Your ${currentState.participants[entrantNumber].ships[
+						shipNumber
+					].name.toLowerCase()} has sunk!`
+				);
 			} else {
-				this.messageUpdate(`The computer's ${currentState.participants[entrantNumber].ships[shipNumber].name.toLowerCase()} has sunk!`);
+				this.messageUpdate(
+					`The computer's ${currentState.participants[entrantNumber].ships[
+						shipNumber
+					].name.toLowerCase()} has sunk!`
+				);
 			}
 		}
-		console.log(currentState);
 		this.setState(currentState);
 		const end = this.winCheck(entrantNumber);
 		return end;
 	};
 
+	// check if all the ships of an entrant have sunk. 
 	winCheck = (entrantNumber) => {
 		let otherEntrantNumber;
 		if (entrantNumber === 0) {
@@ -261,24 +273,17 @@ class App extends Component {
 		} else {
 			otherEntrantNumber = 0;
 		}
-		console.log(otherEntrantNumber);
 		const entrantShips = this.state.participants[entrantNumber].ships;
 		const falseFound = entrantShips.find((ship) => ship.parts.some((part) => part === false));
-		console.log(this.state);
 
+		// celebrate!
 		if (!falseFound) {
-			const end = this.winCelebration(otherEntrantNumber);
+			const end = this.reset(otherEntrantNumber);
 			return end;
 		}
 		return true;
 	};
 
-	winCelebration = (entrantNumber) => {
-		console.log(this.state.gamestart);
-
-		const end = this.reset(entrantNumber);
-		return end;
-	};
 
 	changeOrientation = () => {
 		let newOrientation;
@@ -292,21 +297,15 @@ class App extends Component {
 		});
 	};
 
+	// put board back to initial state, display a win-message if reset is triggered by a game win. 
 	reset = (entrantNumber) => {
-		console.log(this.initialState);
-		let currentState = JSON.parse(JSON.stringify(this.initialState)); 
+		let currentState = JSON.parse(JSON.stringify(this.initialState));
 		if (entrantNumber === 0) {
-			currentState.message = ["You win! You're a hero!"]
+			currentState.message = ["You win! You're a hero!"];
 		} else if (entrantNumber === 1) {
-			currentState.message = ["You lose! The computer is so smart!"]
+			currentState.message = ["You lose! The computer is so smart!"];
 		}
-		this.setState(currentState)
-		// this.setState(JSON.parse(JSON.stringify(this.initialState)));
-		// if (entrantNumber === 0) {
-		// 	this.messageUpdate("You win! Ur sick!");
-		// } else if (entrantNumber === 1) {
-		// 	this.messageUpdate("you lose! The computer is so smart!");
-		// }
+		this.setState(currentState);
 		return undefined;
 	};
 
@@ -357,10 +356,11 @@ class App extends Component {
 
 		return (
 			<div className="App">
-
 				<div className="boards">
 					<div>
-						<h2 className="board-header">{this.state.gamestart? "Your board" : "Set up your board"}</h2>
+						<h2 className="board-header">
+							{this.state.gamestart ? "Your board" : "Set up your board"}
+						</h2>
 						{board(0, null)}
 						<div className="entrant-pieces">
 							{ship(0, 0)}
@@ -372,7 +372,7 @@ class App extends Component {
 					</div>
 					<div>
 						<h2 className="board-header">Opponent's board</h2>
-						{board(1, (this.state.gamestart ? this.playerTurnEnd : null))}
+						{board(1, this.state.gamestart ? this.playerTurnEnd : null)}
 						<div className="entrant-pieces">
 							{ship(1, 0)}
 							{ship(1, 1)}
@@ -383,9 +383,15 @@ class App extends Component {
 					</div>
 					<div className="parent-announcements">
 						<div className="commands">
-							<button className="randomize" onClick={this.randomize}>Randomize</button>
-							<button className="orient" onClick={this.changeOrientation}>Orientation</button>
-							<button className="reset" onClick={() => this.reset(-1)}>Reset</button>
+							<button className="randomize" onClick={this.randomize}>
+								Randomize
+							</button>
+							<button className="orient" onClick={this.changeOrientation}>
+								Orientation
+							</button>
+							<button className="reset" onClick={() => this.reset(-1)}>
+								Reset
+							</button>
 						</div>
 						<Announcements message={this.state.message} />
 					</div>

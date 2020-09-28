@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
 class Board extends Component {
-	// separate this until drop function is just giving a shipID and e.target.getAttribute(name) and passing them to the next function.
 	drop = (e) => {
 		e.preventDefault();
 		const { shipNumber, shipArea } = JSON.parse(e.dataTransfer.getData("ship-data"));
@@ -31,7 +30,6 @@ class Board extends Component {
 		// Only works on computer board
 		if (this.props.boardHit) {
 			this.props.boardHit(
-				e.target.getAttribute("data-value"),
 				e.target.getAttribute("name") // index
 			);
 		}
