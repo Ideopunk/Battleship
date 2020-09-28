@@ -36,13 +36,37 @@ it("Simple: Starter state", () => {
 	expect(wrapper.state("orientation")).toBe("horizontal");
 });
 
-it("Simple UI interaction", () => {
+it("UI test: Simple interaction", () => {
 	const wrapper = shallow(<App />);
-  wrapper.find(".orient").simulate("click");
-  expect(wrapper.state('orientation')).toBe('vertical');
+	wrapper.find(".orient").simulate("click");
+	expect(wrapper.state("orientation")).toBe("vertical");
 });
 
-it("Test viewport function", () => {
+it("Method test: Board state update: Placeship", () => {
+	const wrapper = shallow(<App />);
+	const instance = wrapper.instance();
+	instance.placeShip(0, 0, 0, 0);
+	expect(instance.state.participants[0].board[0]).toMatchObject({
+		status: "ship",
+		shipNumber: 0,
+		shipArea: 0,
+	});
+});
+
+it("UI test: Board state update: Randomize", () => {
+	const wrapper = shallow(<App />);
+	const instance = wrapper.instance();
+	wrapper.find(".randomize").simulate("click");
+	expect(instance.state.participants[0].board).toEqual(
+		expect.arrayContaining([
+			expect.objectContaining({
+				status: "ship",
+			}),
+		])
+	);
+});
+
+it("Viewport function", () => {
 	const rect = { x: 4, width: 4 };
 	expect(viewport.convert(rect, 8)).toBe(1);
 });
