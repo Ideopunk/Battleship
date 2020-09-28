@@ -1,1 +1,4 @@
-Battleship project for TOP, made with React.
+Battleship project for TOP.
+
+React practice,
+Testing practice. 

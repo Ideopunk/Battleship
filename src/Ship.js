@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as viewport from "./viewport";
 class Ship extends Component {
 	dragStart = (e) => {
-		const percentArea = viewport.test(e.target.getBoundingClientRect(), e.clientY, e.clientX);
+		const percentArea = viewport.convert(e.target.getBoundingClientRect(), e.clientX);
 		const shipArea = Math.floor(percentArea * this.props.hits.parts.length);
 		const shipObject = {
 			shipNumber: e.target.getAttribute("data-value"),

@@ -383,9 +383,9 @@ class App extends Component {
 					</div>
 					<div className="parent-announcements">
 						<div className="commands">
-							<button onClick={this.randomize}>Randomize</button>
-							<button onClick={this.changeOrientation}>Orientation</button>
-							<button onClick={() => this.reset(-1)}>Reset</button>
+							<button className="randomize" onClick={this.randomize}>Randomize</button>
+							<button className="orient" onClick={this.changeOrientation}>Orientation</button>
+							<button className="reset" onClick={() => this.reset(-1)}>Reset</button>
 						</div>
 						<Announcements message={this.state.message} />
 					</div>
