@@ -1,4 +1,6 @@
 Battleship project for TOP.
 
 React practice,
-Testing practice. 
+testing practice. 
+
+Desktop support only.
