@@ -4,6 +4,7 @@ import Board from "./Board";
 import Announcements from "./Announcements";
 import "./style/App.scss";
 import * as computer from "./computer";
+import No from "./No";
 
 class App extends Component {
 	initialState = {
@@ -96,7 +97,7 @@ class App extends Component {
 		let cellArray = [];
 		let transitionCellIndex;
 
-		// which ship is being placed? How long is it, and how are we currently oriented? 
+		// which ship is being placed? How long is it, and how are we currently oriented?
 		const ship = this.state.participants[entrantNumber].ships[shipNumber];
 		const shipLength = ship.parts.length;
 		const orientation = this.state.orientation;
@@ -158,7 +159,7 @@ class App extends Component {
 		}
 	}
 
-	// When the player clicks a cell on the opponent's board ( / makes an attack), the turn ends -- IF it was a clickable location. 
+	// When the player clicks a cell on the opponent's board ( / makes an attack), the turn ends -- IF it was a clickable location.
 	// The onBoardHit sequence is ran, and then again for a random location attacked by the computer.
 	playerTurnEnd = (boardIndex) => {
 		let status = this.state.participants[1].board[boardIndex].status;
@@ -205,7 +206,7 @@ class App extends Component {
 
 	onBoardHit = (boardIndex, entrantNumber) => {
 		const currentState = this.state;
-		let status = currentState.participants[entrantNumber].board[boardIndex].status
+		let status = currentState.participants[entrantNumber].board[boardIndex].status;
 
 		// if attack misses
 		if (status === "naw") {
@@ -218,7 +219,7 @@ class App extends Component {
 			}
 			return true;
 
-		// if attack hits
+			// if attack hits
 		} else if (status === "ship") {
 			currentState.participants[entrantNumber].board[boardIndex].status = "hit";
 			if (entrantNumber) {
@@ -228,8 +229,10 @@ class App extends Component {
 				this.messageUpdate("The computer's attack hits!");
 			}
 
-			const {shipArea, shipNumber} = currentState.participants[entrantNumber].board[boardIndex]
-			
+			const { shipArea, shipNumber } = currentState.participants[entrantNumber].board[
+				boardIndex
+			];
+
 			this.setState(currentState);
 			const end = this.onShipHit(shipArea, shipNumber, entrantNumber);
 			return end;
@@ -265,7 +268,7 @@ class App extends Component {
 		return end;
 	};
 
-	// check if all the ships of an entrant have sunk. 
+	// check if all the ships of an entrant have sunk.
 	winCheck = (entrantNumber) => {
 		let otherEntrantNumber;
 		if (entrantNumber === 0) {
@@ -284,7 +287,6 @@ class App extends Component {
 		return true;
 	};
 
-
 	changeOrientation = () => {
 		let newOrientation;
 		if (this.state.orientation === "horizontal") {
@@ -297,7 +299,7 @@ class App extends Component {
 		});
 	};
 
-	// put board back to initial state, display a win-message if reset is triggered by a game win. 
+	// put board back to initial state, display a win-message if reset is triggered by a game win.
 	reset = (entrantNumber) => {
 		let currentState = JSON.parse(JSON.stringify(this.initialState));
 		if (entrantNumber === 0) {
@@ -396,6 +398,8 @@ class App extends Component {
 						<Announcements message={this.state.message} />
 					</div>
 				</div>
+				{/* This isn't a function of state because it's okay if somebody resizes their window (for whatever reason lol) on a desktop, but on loading on mobile this should display to warn them off.  */}
+				{window.innerWidth <= 800 && window.innerHeight <= 600 ? <No /> : null}
 			</div>
 		);
 	}

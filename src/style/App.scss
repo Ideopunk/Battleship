@@ -121,3 +121,15 @@ button {
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.no {
+	padding: 2rem;
+	font-size: 1.5rem;
+	position: fixed;
+	width: 50%;
+	left: 25%;
+	top: 30%;
+	background-color: white;
+	border: 1px solid black;
+	border-radius: 3px;
+}
